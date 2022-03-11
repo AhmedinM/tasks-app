@@ -1,0 +1,158 @@
+<div class="centered-content">
+    <div class="task-manager-container">
+        <div class="sidebar">
+            <h1 class="title">
+                Lists
+            </h1>
+
+            <div class="list-menu" *ngIf="noList">
+                <span class="alert-message">No lists</span>
+            </div>
+
+            <div class="list-menu" *ngIf="!noList">
+                <a *ngFor="let list of lists" class="list-menu-item" [routerLink]="['/lists', list.id]" routerLinkActive="is-active">
+                    <p>{{list.name}}</p>
+                </a>
+
+                <!-- <a class="list-menu-item" [routerLink]="['/lists', listId]" routerLinkActive="is-active">
+                    <p>List 1</p>
+                </a>
+                <a class="list-menu-item" [routerLink]="['/lists', 2]" routerLinkActive="is-active">
+                    <p>List 2</p>
+                </a>
+                <a class="list-menu-item" [routerLink]="['/lists', 2]" routerLinkActive="is-active">
+                    <p>List 2</p>
+                </a>
+                <a class="list-menu-item" [routerLink]="['/lists', 2]" routerLinkActive="is-active">
+                    <p>List 2</p>
+                </a>
+                <a class="list-menu-item" [routerLink]="['/lists', 2]" routerLinkActive="is-active">
+                    <p>List 2</p>
+                </a>
+                <a class="list-menu-item" [routerLink]="['/lists', 2]" routerLinkActive="is-active">
+                    <p>List 2</p>
+                </a>
+                <a class="list-menu-item" [routerLink]="['/lists', 2]" routerLinkActive="is-active">
+                    <p>List 2</p>
+                </a>
+                <a class="list-menu-item" [routerLink]="['/lists', 2]" routerLinkActive="is-active">
+                    <p>List 2</p>
+                </a>
+                <a class="list-menu-item" [routerLink]="['/lists', 2]" routerLinkActive="is-active">
+                    <p>List 2</p>
+                </a>
+                <a class="list-menu-item" [routerLink]="['/lists', 2]" routerLinkActive="is-active">
+                    <p>List 2</p>
+                </a>
+                <a class="list-menu-item" [routerLink]="['/lists', 2]" routerLinkActive="is-active">
+                    <p>List 2</p>
+                </a>
+                <a class="list-menu-item" [routerLink]="['/lists', 2]" routerLinkActive="is-active">
+                    <p>List 2</p>
+                </a> -->
+            </div>
+
+            <button class="button button1" routerLink="/new-list">+ New List</button>
+        </div>
+
+        <div class="tasks-list-container">
+            <div class="top-bar">
+                <h1 class="title2">
+                    Tasks
+                </h1>
+                <div class="dropdown is-hoverable is-right">
+                    <div class="dropdown-trigger">
+                      <button class="button" aria-haspopup="true" aria-controls="dropdown-menu4">
+                        <span class="icon is-small is-left">
+                            <i class="fa fa-cog"></i>
+                          </span>
+                      </button>
+                    </div>
+                    <div class="dropdown-menu" id="dropdown-menu4" role="menu">
+                      <div class="dropdown-content">
+                        <div class="dropdown-item" [routerLink]="['/edit-list', listId]">
+                          Edit
+                        </div>
+                        <div class="dropdown-item has-text-danger" (click)="deleteList(listId)">
+                            Delete
+                        </div>
+                        <hr class="dropdown-divider myclr1">
+                        <div class="dropdown-item myclr2" routerLink="/profile/2">
+                            <i class="fa fa-user"></i><span> Profile</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+            </div>
+
+            <div class="" *ngIf="!listCheck || noTask">
+                <span class="alert-message" *ngIf="!listCheck">Choose a list...</span>
+                <span class="alert-message" *ngIf="listCheck && noTask">No tasks</span>
+            </div>
+
+            <div class="scroll" *ngIf="listCheck || noTask">
+                <div *ngFor="let task of tasks">
+                    <div class="task" (click)="onTaskClick(task.id)" [ngClass]="{ 'complete' : task.finished }">
+                        <p>{{task.text}}</p>
+                        <div class="buttons">
+                            <button class="button is-info minbut" [routerLink]="['/edit-task/', listId, task.id]">
+                                <span class="icon is-small is-left">
+                                    <i class="fa fa-edit"></i>
+                                </span>
+                            </button>
+                            <button class="button is-danger minbut" (click)="deleteTask(task.id)">
+                                <span class="icon is-small is-left">
+                                    <i class="fa fa-trash"></i>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <div class="task">
+                    <p>Something...</p>
+                    <div class="buttons">
+                        <button class="button is-info minbut" routerLink="/edit-task/2">
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-edit"></i>
+                            </span>
+                        </button>
+                        <button class="button is-danger minbut" (click)="deleteTask('2')">
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-trash"></i>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+                <div class="task" (click)="onTaskClick(1)" [ngClass]="{ 'complete' : cmp }">
+                    <p>Something...</p>
+                </div>
+                <div class="task complete">
+                    <p>Something...</p>
+                </div>
+                <div class="task complete">
+                    <p>Something...</p>
+                </div>
+                <div class="task complete">
+                    <p>Something...</p>
+                </div>
+                <div class="task complete">
+                    <p>Something...</p>
+                </div>
+                <div class="task complete">
+                    <p>Something...</p>
+                </div>
+                <div class="task complete">
+                    <p>Something...</p>
+                </div>
+                <div class="task complete">
+                    <p>Something...</p>
+                </div> -->
+            </div>
+
+            <button class="circle-add-button button" [routerLink]="['/new-task', listId]">
+                Add
+            </button>
+        </div>
+    </div>
+</div>

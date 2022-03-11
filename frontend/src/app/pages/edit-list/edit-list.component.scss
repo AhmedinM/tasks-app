@@ -1,0 +1,53 @@
+@import '../../../main-styles.scss';
+
+.centered-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.modal-box {
+    height: 30%;
+    width: 30%;
+    min-height: 200px;
+    min-width: 200px;
+    background: white;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-around;
+}
+
+button {
+    width: 45%;
+    border-radius: 10px;
+
+    &:hover {
+        opacity: 0.8;
+        border: 1px rgb(10, 180, 100) solid;
+    }
+
+    &:active {
+        box-shadow: 0 0 10px rgb(20, 50, 100);
+    }
+}
+
+input {
+    color: rgb(10, 180, 100);
+    border: 1px rgb(10, 180, 100) solid
+}
+
+.button1 {
+    background-color: $myTwo;
+    color: white;
+}
+
+.button2 {
+    background-color: $myOne;
+    color: white;
+}

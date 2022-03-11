@@ -1,0 +1,74 @@
+@import '../../../main-styles.scss';
+
+.centered-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    background: white;
+    height: 65%;
+    min-height: 350px;
+    width: 40%;
+    min-width: 250px;
+    border-radius: 2%;
+    border: 3px rgb(10, 180, 100) solid;
+    display: flex;
+    max-width: 80%;
+    max-height: 80%;
+    padding: 2%;
+}
+
+.title {
+    color: rgb(10, 180, 100);
+    display: flex;
+    justify-content: space-between;
+}
+
+input {
+    color: rgb(10, 180, 100);
+    border: 1px rgb(10, 180, 100) solid
+}
+
+button {
+    width: 25%;
+    border-radius: 10px;
+
+    &:hover {
+        opacity: 0.8;
+        border: 1px rgb(10, 180, 100) solid;
+    }
+
+    &:active {
+        box-shadow: 0 0 10px rgb(20, 50, 100);
+    }
+}
+
+hr {
+    background-color: rgb(10, 180, 100);
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-around;
+}
+
+.button1 {
+    background-color: $myTwo;
+    color: white;
+}
+
+.button2 {
+    background-color: $myOne;
+    color: white;
+}
+
+.button3 {
+    background-color: red;
+    color: white;
+}

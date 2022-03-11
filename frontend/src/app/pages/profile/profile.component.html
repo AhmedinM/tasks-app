@@ -1,0 +1,32 @@
+<div class="centered-content">
+    <div class="login-container">
+        <div class="title">
+            <h1>user@test.com</h1>
+            <button class="button button3" routerLink="/check">
+                <i class="fa fa-sign-out"></i><span> Log out</span>
+            </button>
+        </div>
+        <hr>
+        <h3 class="title">Change password:</h3>
+        <div class="field">
+            <p class="control has-icons-left">
+                <input #passwordInput class="input" type="password" placeholder="Enter new password...">
+                <span class="icon is-small is-left">
+                    <i class="fa fa-lock has-text-success"></i>
+                </span>
+            </p>
+        </div>
+        <div class="field">
+            <p class="control has-icons-left">
+                <input #confirmInput class="input" type="password" placeholder="Confirm password...">
+                <span class="icon is-small is-left">
+                    <i class="fa fa-lock has-text-success"></i>
+                </span>
+            </p>
+        </div>
+        <hr>
+        <div class="field buttons">
+            <button class="button button1" routerLink="/">Close</button>
+            <button class="button button2" routerLink="/">Save</button>
+        </div>
+</div>
