@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BusinessLayer.Services.Users;
 using Core.DTOs.Users;
 using Core.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -17,15 +18,25 @@ namespace API.Controllers
             _userService = userService;
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         public async Task<ActionResult<List<GetUserDto>>> GetUsers()
         {
             var result = await _userService.GetUsers();
-            if (result == null) {
-                return NotFound();
-            } else {
-                return Ok(result);
-            }
+            
+            return (result == null) ?
+                NotFound() :
+                Ok(result);
+        }
+
+        [Authorize]
+        [HttpGet("one/{userId}")]
+        public async Task<ActionResult<GetUserDto>> GetUser(int userId)
+        {
+            var result = await _userService.GetUser(userId);
+            
+            return (result == null) ?
+                NotFound() :
+                Ok(result);
         }
     }
 }

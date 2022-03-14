@@ -19,13 +19,21 @@ namespace API.Controllers
         [HttpGet("{userId}")]
         public async Task<ActionResult<List<GetListDto>>> GetLists(int userId)
         {
-            return await _listService.GetLists(userId);
+            var result = await _listService.GetLists(userId);
+
+            return (result == null) ?
+                NotFound() :
+                Ok(result);
         }
 
         [HttpPost]
         public async Task<ActionResult<GetListDto>> CreateList(CreateListDto createListDto)
         {
-            return await _listService.CreateList(createListDto);
+            var result = await _listService.CreateList(createListDto);
+
+            return (result == null) ?
+                NotFound() :
+                Ok(result);
         }
 
         [HttpPut("{listId}")]
@@ -34,13 +42,17 @@ namespace API.Controllers
             if (listId != updateListDto.Id) return BadRequest("IDs are not the same");
 
             var result = await _listService.UpdateList(updateListDto);
-            return Ok(result);
+            
+            return (result == null) ?
+                NotFound() :
+                Ok(result);
         }
 
         [HttpDelete("{listId}")]
         public async Task<ActionResult> DeleteList(int listId)
         {
             await _listService.DeleteList(listId);
+            
             return NoContent();
         }
     }

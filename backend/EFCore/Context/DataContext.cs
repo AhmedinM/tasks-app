@@ -2,7 +2,6 @@
 using Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Task = Core.Entities.Task;
-using Microsoft.EntityFrameworkCore;
 
 namespace EFCore.Context
 {
@@ -23,6 +22,21 @@ namespace EFCore.Context
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Email).IsUnique();
 
+            modelBuilder.Entity<User>()
+                .Property(u => u.CreatedAt).HasDefaultValue(DateTime.Now);
+
+            modelBuilder.Entity<List>()
+                .Property(l => l.Name).IsRequired();
+
+            modelBuilder.Entity<List>()
+                .Property(l => l.CreatedAt).HasDefaultValue(DateTime.Now);
+            
+            modelBuilder.Entity<Task>()
+                .Property(t => t.Text).IsRequired();
+
+            modelBuilder.Entity<Task>()
+                .Property(t => t.CreatedAt).HasDefaultValue(DateTime.Now);
+            
             modelBuilder.Entity<Task>()
                 .Property(t => t.Finished).HasDefaultValue(false);
         }

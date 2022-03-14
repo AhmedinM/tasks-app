@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BusinessLayer.Mappings;
+using BusinessLayer.Services.Accounts;
 using BusinessLayer.Services.Lists;
 using BusinessLayer.Services.Tasks;
 using BusinessLayer.Services.Users;
@@ -19,7 +20,7 @@ public static class BusinessLayerExtensions
         services.AddScoped<IAccountService, AccountService>();
         services.AddScoped<IListService, ListService>();
         services.AddScoped<ITaskService, TaskService>();
-        // services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<ITokenService, TokenService>();
 
         services.AddAutoMapper(c => c.AddProfiles(profileList), typeof(List<Profile>));
 

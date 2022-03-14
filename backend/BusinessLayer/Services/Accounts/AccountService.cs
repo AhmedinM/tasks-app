@@ -7,21 +7,26 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Core.DTOs.Users;
 using Core.Entities;
+using EFCore.Repositories.Accounts;
 using EFCore.Repositories.Users;
 
-namespace BusinessLayer.Services.Users
+namespace BusinessLayer.Services.Accounts
 {
     public class AccountService : IAccountService
     {
         private readonly IAccountRepository _accountRepository;
         private readonly IMapper _mapper;
-        public AccountService(IAccountRepository accountRepository, IMapper mapper)
+        private readonly ITokenService _tokenService;
+        private readonly IUserRepository _userRepository;
+        public AccountService(IAccountRepository accountRepository, IMapper mapper, ITokenService tokenService, IUserRepository userRepository)
         {
+            _userRepository = userRepository;
+            _tokenService = tokenService;
             _mapper = mapper;
             _accountRepository = accountRepository;
         }
 
-        private async Task<bool> CheckEmail(string email)
+        public async Task<bool> CheckEmail(string email)
         {
             var user = await _accountRepository.GetUserByEmail(email);
             if (user == null)
@@ -35,7 +40,7 @@ namespace BusinessLayer.Services.Users
             // return false;
         }
 
-        public async Task<User> RegisterUser(CreateUserDto createUserDto)
+        public async Task<UserDto> RegisterUser(CreateUserDto createUserDto)
         {
             var check = await CheckEmail(createUserDto.Email);
             if (!check)
@@ -50,16 +55,20 @@ namespace BusinessLayer.Services.Users
                     Role = "User"
                 };
 
-                // var result = _accountRepository.RegisterUser(user);
+                var regUser = await _accountRepository.RegisterUser(user);
 
-                // return _mapper.Map<GetUserDto>(result);
+                var token = _tokenService.CreateToken(regUser);
 
-                return await _accountRepository.RegisterUser(user);
+                var result = _mapper.Map<UserDto>(regUser);
+                result.Token = token;
+
+                return result;
+
+                // return await _accountRepository.RegisterUser(user);
             }
             else
             {
-                var user = new User{};
-                return user;
+                return new UserDto{};
             }
             
             // throw new NotImplementedException();
@@ -67,12 +76,7 @@ namespace BusinessLayer.Services.Users
             // return await _accountRepository.RegisterUser(user);
         }
 
-        Task<bool> IAccountService.CheckEmail(string email)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<User> Login(CreateUserDto createUserDto)
+        public async Task<UserDto> Login(CreateUserDto createUserDto)
         {
             var user = await _accountRepository.GetUserByEmail(createUserDto.Email);
 
@@ -83,15 +87,69 @@ namespace BusinessLayer.Services.Users
 
                 for (var i = 0; i < computedHash.Length; i++)
                 {
-                    if (computedHash[i] != user.PasswordHash[i]) return null;
+                    if (computedHash[i] != user.PasswordHash[i])
+                    {
+                        return new UserDto{};
+                    }
                 }
 
-                return user;
-            } else {
-                return null;
-            }
+                var token = _tokenService.CreateToken(user);
 
-            // return user;
+                var result = _mapper.Map<UserDto>(user);
+                result.Token = token;
+
+                return result;
+
+                // return user;
+            }
+            else
+            {
+                return new UserDto{};
+            }
+        }
+
+        public async Task<GetUserDto> UpdatePassword(UpdateUserDto updateUserDto)
+        {
+            var user = await _userRepository.GetUser(updateUserDto.Id);
+
+            using var hmac = new HMACSHA512();
+
+            var passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(updateUserDto.Password));
+            var passwordSalt = hmac.Key;
+
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
+
+            return _mapper.Map<GetUserDto>(await _accountRepository.UpdateUser(user));
+
+            // return result;
+        }
+
+        public async Task<bool> DeleteUser(UpdateUserDto updateUserDto)
+        {
+            var user = await _userRepository.GetUser(updateUserDto.Id);
+
+            if (user != null)
+            {
+                using var hmac = new HMACSHA512(user.PasswordSalt);
+                var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(updateUserDto.Password));
+
+                for (var i = 0; i < computedHash.Length; i++)
+                {
+                    if (computedHash[i] != user.PasswordHash[i])
+                    {
+                        return false;
+                    }
+                }
+
+                await _accountRepository.DeleteUser(user);
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

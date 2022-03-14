@@ -9,14 +9,14 @@ using Core.Entities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace BusinessLayer.Services.Users
+namespace BusinessLayer.Services.Accounts
 {
     public class TokenService : ITokenService
     {
         private readonly SymmetricSecurityKey _key;
         public TokenService(IConfiguration config)
         {
-            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("fhdkjshfdj"));
+            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("just-some-random-key-for-testing-123"));
         }
 
         public string CreateToken(User user)

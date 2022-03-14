@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Core.DTOs.Users
 {
-    public class CreateUserDto
+    public class UpdateUserDto
     {
         [Required]
-        public string Email { get; set; }
+        public int Id { get; set; }
         [Required]
         public string Password { get; set; }
     }

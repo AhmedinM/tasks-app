@@ -48,7 +48,7 @@ namespace EFCore.Repositories.Tasks
             _context.Tasks.Update(task);
             await _context.SaveChangesAsync();
 
-            return task;
+            return await GetTask(task.Id);
         }
     }
 }

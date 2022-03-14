@@ -13,7 +13,8 @@ namespace BusinessLayer.Mappings
         public MappingUsers()
         {
             CreateMap<User, GetUserDto>();
-            CreateMap<GetUserDto, User>();
+            // CreateMap<GetUserDto, User>();
+            CreateMap<User, UserDto>();
         }
     }
 }

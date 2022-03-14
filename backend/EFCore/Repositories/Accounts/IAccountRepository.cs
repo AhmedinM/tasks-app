@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 using Core.DTOs.Users;
 using Core.Entities;
 
-namespace EFCore.Repositories.Users
+namespace EFCore.Repositories.Accounts
 {
     public interface IAccountRepository
     {
         Task<User> GetUserByEmail(string email);
         Task<User> RegisterUser(User user);
-        Task<GetUserDto> Login(CreateUserDto createUserDto);
+        // Task<GetUserDto> Login(CreateUserDto createUserDto);
+        Task<User> UpdateUser(User user);
+        System.Threading.Tasks.Task DeleteUser(User user);
     }
 }

@@ -20,11 +20,8 @@ namespace BusinessLayer.Services.Lists
         }
 
         public async Task<GetListDto> CreateList(CreateListDto createListDto)
-        {
-            var list = _mapper.Map<List>(createListDto);
-            var result = await _listRepository.CreateList(list);
-            
-            return _mapper.Map<GetListDto>(result);
+        {   
+            return _mapper.Map<GetListDto>(await _listRepository.CreateList(_mapper.Map<List>(createListDto)));
         }
 
         public async System.Threading.Tasks.Task DeleteList(int listId)
@@ -34,20 +31,12 @@ namespace BusinessLayer.Services.Lists
 
         public async Task<List<GetListDto>> GetLists(int userId)
         {
-            var lists = await _listRepository.GetLists(userId);
-
-            return _mapper.Map<List<GetListDto>>(lists);
+            return _mapper.Map<List<GetListDto>>(await _listRepository.GetLists(userId));
         }
 
         public async Task<GetListDto> UpdateList(UpdateListDto updateListDto)
         {
-            var list = await _listRepository.GetList(updateListDto.Id);
-            
-            var listToUpdate = _mapper.Map<UpdateListDto, List>(updateListDto, list);
-
-            var result = await _listRepository.UpdateList(list);
-
-            return _mapper.Map<GetListDto>(result);
+            return _mapper.Map<GetListDto>(await _listRepository.UpdateList(_mapper.Map<UpdateListDto, List>(updateListDto, await _listRepository.GetList(updateListDto.Id))));
         }
     }
 }

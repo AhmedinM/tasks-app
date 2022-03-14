@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 using Core.DTOs.Users;
 using Core.Entities;
 
-namespace BusinessLayer.Services.Users
+namespace BusinessLayer.Services.Accounts
 {
     public interface IAccountService
     {
-        Task<User> RegisterUser(CreateUserDto createUserDto);
+        Task<UserDto> RegisterUser(CreateUserDto createUserDto);
         Task<bool> CheckEmail(string email);
-        Task<User> Login(CreateUserDto createUserDto);
+        Task<UserDto> Login(CreateUserDto createUserDto);
+        Task<GetUserDto> UpdatePassword(UpdateUserDto updateUserDto);
+        Task<bool> DeleteUser(UpdateUserDto updateUserDto);
     }
 }

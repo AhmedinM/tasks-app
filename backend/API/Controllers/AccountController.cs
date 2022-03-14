@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BusinessLayer.Services.Users;
+using BusinessLayer.Services.Accounts;
 using Core.DTOs.Users;
 using Core.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -12,19 +12,17 @@ namespace API.Controllers
     public class AccountController : BaseApiController
     {
         private readonly IAccountService _accountService;
-        // private readonly ITokenService _tokenService;
         public AccountController(IAccountService accountService)
         {
-            // _tokenService = tokenService;
             _accountService = accountService;
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<User>> RegisterUser(CreateUserDto createUserDto)
+        public async Task<ActionResult<UserDto>> RegisterUser(CreateUserDto createUserDto)
         {
             var user = await _accountService.RegisterUser(createUserDto);
 
-            return (user == null) ?
+            return (user.Email == null) ?
                 BadRequest("Email already exists") :
                 Created("User is successfully created", user);
         }
@@ -33,14 +31,32 @@ namespace API.Controllers
         public async Task<ActionResult<UserDto>> Login(CreateUserDto createUserDto)
         {
             var user = await _accountService.Login(createUserDto);
-            // var token = _tokenService.CreateToken(user);
+            
+            return (user.Email == null) ?
+                Unauthorized("Your info is incorrect") :
+                Created("User is successfully logged in", user);
+        }
 
-            return new UserDto
-            {
-                Id = user.Id,
-                Email = user.Email,
-                // Token = token
-            };
+        [HttpPut("update-password/{userId}")]
+        public async Task<ActionResult<UserDto>> UpdatePassword(int userId, UpdateUserDto updateUserDto) {
+            if (userId != updateUserDto.Id) return BadRequest("IDs are not the same");
+
+            var result = await _accountService.UpdatePassword(updateUserDto);
+
+            return (result == null) ?
+                NotFound() :
+                Ok(result);
+        }
+
+        [HttpDelete("delete/{userId}")]
+        public async Task<ActionResult<bool>> DeleteAccount(int userId, UpdateUserDto updateUserDto) {
+            if (userId != updateUserDto.Id) return BadRequest("IDs are not the same");
+
+            var result = await _accountService.DeleteUser(updateUserDto);
+
+            return (result == false) ?
+                BadRequest("Your info is incorrect") :
+                NoContent();
         }
     }
 }

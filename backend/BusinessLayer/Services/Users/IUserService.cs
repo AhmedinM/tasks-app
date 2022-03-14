@@ -9,5 +9,6 @@ namespace BusinessLayer.Services.Users
     public interface IUserService
     {
         Task<List<GetUserDto>> GetUsers();
+        Task<GetUserDto> GetUser(int userId);
     }
 }

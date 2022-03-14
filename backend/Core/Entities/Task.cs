@@ -10,7 +10,7 @@ namespace Core.Entities
         public int Id { get; set; }
         public string? Text { get; set; }
         public bool Finished { get; set; }
-
+        public DateTime CreatedAt { get; set; }
         public List? List { get; set; }
         public int ListId { get; set; }
     }

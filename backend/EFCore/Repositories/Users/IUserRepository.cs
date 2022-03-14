@@ -9,5 +9,6 @@ namespace EFCore.Repositories.Users
     public interface IUserRepository
     {
         Task<List<User>> GetUsers();
+        Task<User> GetUser(int userId);
     }
 }

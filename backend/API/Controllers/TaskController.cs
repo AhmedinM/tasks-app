@@ -19,19 +19,31 @@ namespace API.Controllers
         [HttpGet("one/{taskId}")]
         public async Task<ActionResult<GetTaskDto>> GetTask(int taskId)
         {
-            return await _taskService.GetTask(taskId);
+            var result = await _taskService.GetTask(taskId);
+
+            return (result == null) ?
+                NotFound() :
+                Ok(result);
         }
 
         [HttpGet("tasks/{listId}")]
         public async Task<ActionResult<List<GetTaskDto>>> GetTasks(int listId)
         {
-            return await _taskService.GetTasks(listId);
+            var result = await _taskService.GetTasks(listId);
+
+            return (result == null) ?
+                NotFound() :
+                Ok(result);
         }
 
         [HttpPost]
         public async Task<ActionResult<GetTaskDto>> CreateTask(CreateTaskDto createTaskDto)
         {
-            return await _taskService.CreateTask(createTaskDto);
+            var result = await _taskService.CreateTask(createTaskDto);
+
+            return (result == null) ?
+                NotFound() :
+                Ok(result);
         }
 
         [HttpPut("task/{taskId}")]
@@ -39,21 +51,28 @@ namespace API.Controllers
         {
             if (taskId != updateTaskDto.Id) return BadRequest("IDs are not the same");
             
-            var task = await _taskService.UpdateTask(updateTaskDto);
-            return Ok(task);
+            var result = await _taskService.UpdateTask(updateTaskDto);
+            
+            return (result == null) ?
+                NotFound() :
+                Ok(result);
         }
 
         [HttpPut("status/{taskId}")]
         public async Task<ActionResult<GetTaskDto>> UpdateTaskStatus(int taskId)
         {
-            var task = await _taskService.UpdateTaskStatus(taskId);
-            return Ok(task);
+            var result = await _taskService.UpdateTaskStatus(taskId);
+            
+            return (result == null) ?
+                NotFound() :
+                Ok(result);
         }
 
         [HttpDelete("{taskId}")]
         public async Task<ActionResult> DeleteList(int taskId)
         {
             await _taskService.DeleteTask(taskId);
+            
             return NoContent();
         }
     }

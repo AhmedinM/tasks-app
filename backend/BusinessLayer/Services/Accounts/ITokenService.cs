@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Core.Entities;
 
-namespace BusinessLayer.Services.Users
+namespace BusinessLayer.Services.Accounts
 {
     public interface ITokenService
     {

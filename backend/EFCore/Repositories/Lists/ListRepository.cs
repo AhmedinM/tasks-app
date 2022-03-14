@@ -48,7 +48,8 @@ namespace EFCore.Repositories.Lists
         {
             _context.Lists.Update(list);
             await _context.SaveChangesAsync();
-            return list;
+            
+            return await GetList(list.Id);
         }
     }
 }
