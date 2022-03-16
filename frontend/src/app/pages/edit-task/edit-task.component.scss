@@ -51,3 +51,11 @@ input {
     background-color: $myOne;
     color: white;
 }
+
+.is-invalid {
+    border-color: red;
+}
+
+.invalid-feedback {
+    color: red;
+}

@@ -13,7 +13,7 @@ namespace BusinessLayer.Mappings
         public MappingLists()
         {
             CreateMap<List, GetListDto>();
-            CreateMap<List, CreateListDto>();
+            CreateMap<CreateListDto, List>();
             CreateMap<UpdateListDto, List>();
         }
     }

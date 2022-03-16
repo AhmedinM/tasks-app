@@ -1,13 +1,22 @@
 <div class="centered-content">
-    <div class="modal-box">
+    <form [formGroup]="editForm" class="modal-box" (ngSubmit)="editForm.valid && saveTask()">
         <h1 class="title">
             Edit task
         </h1>
-        <input type="text" class="input has-background-light is-medium" placeholder="Enter new name..." [(ngModel)]="task.text" value="{{task.text}}">
+        <input
+            [class.is-invalid]="editForm.get('text')?.errors && editForm.get('text')?.touched" 
+            formControlName="text" type="text" 
+            class="input has-background-light is-medium" 
+            placeholder="Enter new name..." 
+            value="{{task.text}}">
+
+        <div class="invalid-feedback" *ngIf="editForm.get('text')?.hasError('required') && editForm.get('text')?.touched">
+            Text cannot be unchanged or empty.
+        </div>
         <br> <br>
         <div class="buttons">
-            <button class="button button1" (click)="cancel()">Cancel</button>
-            <button class="button button2" (click)="saveTask()">Save</button>
+            <button type="button" class="button button1" (click)="cancel()">Cancel</button>
+            <button [disabled]="!editForm.valid" type="submit" class="button button2" (click)="saveTask()">Save</button>
         </div>
-    </div>
+    </form>
 </div>

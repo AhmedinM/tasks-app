@@ -29,6 +29,11 @@ namespace BusinessLayer.Services.Lists
             await _listRepository.DeleteList(listId);
         }
 
+        public async Task<GetListDto> GetList(int listId)
+        {
+            return _mapper.Map<GetListDto>(await _listRepository.GetList(listId));
+        }
+
         public async Task<List<GetListDto>> GetLists(int userId)
         {
             return _mapper.Map<List<GetListDto>>(await _listRepository.GetLists(userId));

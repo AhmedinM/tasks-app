@@ -1,5 +1,5 @@
 export interface List {
-    id: number;
-    name: string;
-    userId: number;
+    id?: number;
+    name?: string;
+    userId?: number;
 }

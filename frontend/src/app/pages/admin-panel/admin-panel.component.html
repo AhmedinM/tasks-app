@@ -1,0 +1,127 @@
+<div class="centered-content">
+    <div class="task-manager-container">
+        <div class="sidebar">
+            <h1 class="title">
+                Admin Panel
+            </h1>
+
+            <div class="list-menu">
+                <a class="list-menu-item" [routerLink]="['/admin', 1]" routerLinkActive="is-active">
+                    <i class="fa fa-user marg"></i>
+                    <p>Users</p>
+                </a>
+                <a class="list-menu-item" [routerLink]="['/admin', 2]" routerLinkActive="is-active">
+                    <i class="fa fa-edit marg"></i>
+                    <p>New Admin</p>
+                </a>
+                <a class="list-menu-item" [routerLink]="['/admin', 3]" routerLinkActive="is-active">
+                    <i class="fa fa-trash marg"></i>
+                    <p>Delete Account</p>
+                </a>
+                <hr>
+                <a class="list-menu-item">
+                    <i class="fa fa-sign-out marg"></i>
+                    <p>Logout</p>
+                </a>
+            </div>
+        </div>
+
+        <div *ngIf="window==1" class="tasks-list-container">
+            <div class="top-bar">
+                <br>
+                <br>
+                <br>
+            </div>
+
+            <div *ngIf="!users">
+                <span class="alert-message" >Choose a list...</span>
+            </div>
+
+            <div class="scroll" *ngIf="users">
+                <div *ngFor="let user of users">
+                    <div class="task">
+                        <p>
+                            {{user.email}}
+                            <span class="between">| </span>
+                            <span *ngIf="user.role!='Admin'" class="role">{{user.role}}</span>
+                            <span *ngIf="user.role=='Admin'" class="role2">{{user.role}}</span>
+                        </p>
+                        <div class="buttons">
+                            <button class="button is-danger minbut" (click)="getUsers()">
+                                <span class="icon is-small is-left">
+                                    <i class="fa fa-trash"></i>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div *ngIf="window==2" class="tasks-list-container">
+            <div class="top-bar">
+                <br>
+                <br>
+            </div>
+
+            <div class="scroll" *ngIf="users">
+                <div class="login-container">
+                    <div class="field">
+                      <p class="control has-icons-left has-icons-right">
+                        <input #emailInput class="input" type="email" placeholder="Email">
+                        <span class="icon is-small is-left">
+                          <i class="fa fa-envelope has-text-success"></i>
+                        </span>
+                      </p>
+                    </div>
+                    <div class="field">
+                      <p class="control has-icons-left">
+                        <input #passwordInput class="input" type="password" placeholder="Password">
+                        <span class="icon is-small is-left">
+                          <i class="fa fa-lock has-text-success"></i>
+                        </span>
+                      </p>
+                    </div>
+                    <div class="field">
+                      <p class="control has-text-centered">
+                        <button class="button is-success has-text-light">
+                          Create
+                        </button>
+                      </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div *ngIf="window==3" class="tasks-list-container">
+            <div class="top-bar">
+                <br>
+                <br>
+            </div>
+
+            <div class="scroll" *ngIf="users">
+                <div class="login-container">
+                    <div class="field">
+                      <p class="control has-icons-left">
+                        <input #passwordInput class="input" type="password" placeholder="Password">
+                        <span class="icon is-small is-left">
+                          <i class="fa fa-lock has-text-success"></i>
+                        </span>
+                      </p>
+                    </div>
+                    <div class="field">
+                      <p class="control is-pulled-right">
+                        <button class="button is-danger has-text-light">
+                          Delete
+                        </button>
+                      </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>

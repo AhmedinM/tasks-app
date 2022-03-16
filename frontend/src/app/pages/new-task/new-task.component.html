@@ -1,13 +1,21 @@
 <div class="centered-content">
-    <div class="modal-box">
+    <form [formGroup]="createForm" class="modal-box" (ngSubmit)="createForm.valid && createTask()">
         <h1 class="title">
             Create a new task
         </h1>
-        <input #taskTitleInput type="text" class="input has-background-light is-medium" placeholder="Enter task name...">
+        <input
+            [class.is-invalid]="createForm.get('text')?.errors && createForm.get('text')?.touched"
+            formControlName="text"
+            type="text"
+            class="input has-background-light is-medium"
+            placeholder="Enter task name...">
+        <div class="invalid-feedback" *ngIf="createForm.get('text')?.hasError('required') && createForm.get('text')?.touched">
+            Please insert text.
+        </div>
         <br> <br>
         <div class="buttons">
-            <button class="button button1" (click)="cancel()">Cancel</button>
-            <button class="button button2" (click)="createTask(taskTitleInput.value)">Create</button>
+            <button type="button" class="button button1" (click)="cancel()">Cancel</button>
+            <button [disabled]="!createForm.valid" type="submit" class="button button2">Create</button>
         </div>
-    </div>
+    </form>
 </div>

@@ -16,6 +16,7 @@ import { EditListComponent } from './pages/edit-list/edit-list.component';
 import { StartPageComponent } from './pages/start-page/start-page.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { AdminPanelComponent } from './pages/admin-panel/admin-panel.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { ProfileComponent } from './pages/profile/profile.component';
     EditListComponent,
     StartPageComponent,
     NotFoundComponent,
-    ProfileComponent
+    ProfileComponent,
+    AdminPanelComponent
   ],
   imports: [
     BrowserModule,

@@ -12,12 +12,12 @@ export class ListService {
 
   constructor(private http: HttpClient) { }
 
-  getList(listId: number) {
-
+  getList(listId: number): Observable<List> {
+    return this.http.get<List>(this.baseUrl + "list/one/" + listId);
   }
 
   getLists(userId: number): Observable<List[]> {
-    return this.http.get<List[]>(this.baseUrl + "list/" + userId);
+    return this.http.get<List[]>(this.baseUrl + "list/all/" + userId);
   }
 
   createList(title: string, userId: number): Observable<List> {
@@ -25,7 +25,7 @@ export class ListService {
   }
 
   updateList(listId: number, title: string): Observable<List> {
-    return this.http.put<List>(this.baseUrl + "list/" + listId, { name: title });
+    return this.http.put<List>(this.baseUrl + "list/" + listId, { id: listId, name: title });
   }
 
   deleteList(listId: number) {

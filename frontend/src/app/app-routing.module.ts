@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AdminPanelComponent } from './pages/admin-panel/admin-panel.component';
 import { EditListComponent } from './pages/edit-list/edit-list.component';
 import { EditTaskComponent } from './pages/edit-task/edit-task.component';
 import { LoginComponent } from './pages/login/login.component';
@@ -23,6 +24,7 @@ const routes: Routes = [
   { path: 'edit-list/:listId', component: EditListComponent },
   { path: 'check', component: StartPageComponent },
   { path: 'profile/:userId', component: ProfileComponent },
+  { path: 'admin/:window', component: AdminPanelComponent },
   { path: '**', component: NotFoundComponent },
 
 ];

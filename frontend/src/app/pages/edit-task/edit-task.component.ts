@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Task } from 'src/app/models/task.model';
 import { TaskService } from 'src/app/services/task.service';
 
 @Component({
@@ -11,17 +12,26 @@ import { TaskService } from 'src/app/services/task.service';
 export class EditTaskComponent implements OnInit {
   listId: number = 0;
   taskId: number = 0;
-  task: any;
-  // text = "";
-  // editForm: FormGroup;
+  task: Task = {id: 0};
 
-  constructor(private router: Router, private route: ActivatedRoute, private taskService: TaskService) { }
+  editForm: FormGroup = this.fb.group({
+    text: ['', Validators.required]
+  });
+
+  constructor(private router: Router, private route: ActivatedRoute, private taskService: TaskService, private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.route.params.subscribe((params: Params) => {
-      this.listId = params['listId'];
-      this.taskId = params['taskId'];
-      this.getTask();
+      var lId = params['listId'];
+      var tId = params['taskId'];
+      
+      if (lId === 'undefined' || tId === 'undefined') {
+        this.router.navigate(['lists/']);
+      } else {
+        this.listId = parseInt(lId);
+        this.taskId = parseInt(tId);
+        this.getTask();
+      }
       // this.initializeForm();
     });
   }
@@ -40,8 +50,7 @@ export class EditTaskComponent implements OnInit {
   }
 
   saveTask() {
-    // console.log(this.editForm.value.text);
-    this.taskService.updateTask(this.taskId, this.task.text).subscribe(() => {
+    this.taskService.updateTask(this.taskId, this.editForm.value.text).subscribe(() => {
       this.router.navigate(["lists/" + this.listId]);
     });
   }

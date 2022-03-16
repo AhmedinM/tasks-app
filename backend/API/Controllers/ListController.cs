@@ -16,7 +16,17 @@ namespace API.Controllers
             _listService = listService;
         }
 
-        [HttpGet("{userId}")]
+        [HttpGet("one/{listId}")]
+        public async Task<ActionResult<GetListDto>> GetList(int listId)
+        {
+            var result = await _listService.GetList(listId);
+
+            return (result == null) ?
+                NotFound() :
+                Ok(result);
+        }
+
+        [HttpGet("all/{userId}")]
         public async Task<ActionResult<List<GetListDto>>> GetLists(int userId)
         {
             var result = await _listService.GetLists(userId);

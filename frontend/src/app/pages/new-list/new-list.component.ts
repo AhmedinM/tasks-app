@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ListService } from 'src/app/services/list.service';
 
@@ -9,14 +10,17 @@ import { ListService } from 'src/app/services/list.service';
 })
 export class NewListComponent implements OnInit {
   userId = 1;
+  createForm: FormGroup = this.fb.group({
+    title: ['', Validators.required]
+  });
 
-  constructor(private router: Router, private listService: ListService,) { }
+  constructor(private router: Router, private listService: ListService, private fb: FormBuilder) { }
 
   ngOnInit(): void {
   }
 
-  createList(title: string) {
-    this.listService.createList(title, this.userId).subscribe(() => {
+  createList() {
+    this.listService.createList(this.createForm.value.title, this.userId).subscribe(() => {
       this.router.navigate(['/lists']);
     });
   }
