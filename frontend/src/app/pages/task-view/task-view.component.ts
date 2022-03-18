@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { List } from 'src/app/models/list.model';
 import { Task } from 'src/app/models/task.model';
+import { User } from 'src/app/models/user.model';
+import { AccountService } from 'src/app/services/account.service';
 import { ListService } from 'src/app/services/list.service';
 import { TaskService } from 'src/app/services/task.service';
 
@@ -12,25 +14,35 @@ import { TaskService } from 'src/app/services/task.service';
 })
 export class TaskViewComponent implements OnInit {
   listId = 0;
-  userId = 1;   //  privremeno
+  // userId = 1;   //  privremeno
+  userId: number | undefined = 0;
+  user: any;
   listCheck = false;
   noList = false;
   noTask = false;
   lists: List[] = [];
   tasks: Task[] = [];
 
-  constructor(private route: ActivatedRoute, private listService: ListService, private taskService: TaskService, private router: Router) { }
+  constructor(private route: ActivatedRoute, private listService: ListService, private taskService: TaskService, private router: Router, private accountService: AccountService) { }
 
   ngOnInit(): void {
+    this.getUser();
     this.route.params.subscribe((params: Params) => {
       this.listId = params['listId'];
-      this.getLists(this.userId);
+      this.getLists(this.userId as number);
       if (this.listId != undefined) {
         this.listCheck = true;
         this.getTasks(this.listId);
       } else {
         this.listCheck = false;
       }
+    });
+  }
+
+  getUser() {
+    this.accountService.currentUser$.subscribe(user => {
+      this.user = user;
+      this.userId = this.user.id;
     });
   }
 

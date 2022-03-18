@@ -18,10 +18,10 @@ namespace API.Controllers
             _userService = userService;
         }
 
-        [HttpGet("all")]
-        public async Task<ActionResult<List<GetUserDto>>> GetUsers()
+        [HttpGet("all/{userId}")]
+        public async Task<ActionResult<List<GetUserDto>>> GetUsers(int userId)
         {
-            var result = await _userService.GetUsers();
+            var result = await _userService.GetUsers(userId);
             
             return (result == null) ?
                 NotFound() :

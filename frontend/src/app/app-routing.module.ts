@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AdminGuard } from './guards/admin.guard';
 import { AuthGuard } from './guards/auth.guard';
 import { NoAuthGuard } from './guards/no-auth.guard';
 import { AdminPanelComponent } from './pages/admin-panel/admin-panel.component';
@@ -16,7 +17,7 @@ import { TaskViewComponent } from './pages/task-view/task-view.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'lists', pathMatch: 'full' },
-  { path: 'new-list', component: NewListComponent, canActivate: [AuthGuard] },
+  { path: 'new-list/:userId', component: NewListComponent, canActivate: [AuthGuard] },
   { path: 'lists', component: TaskViewComponent, canActivate: [AuthGuard] },
   { path: 'lists/:listId', component: TaskViewComponent, canActivate: [AuthGuard] },
   { path: 'new-task/:listId', component: NewTaskComponent, canActivate: [AuthGuard] },
@@ -26,7 +27,7 @@ const routes: Routes = [
   { path: 'edit-list/:listId', component: EditListComponent, canActivate: [AuthGuard] },
   { path: 'check', component: StartPageComponent, canActivate: [NoAuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
-  { path: 'admin/:window', component: AdminPanelComponent },
+  { path: 'admin/:window', component: AdminPanelComponent, canActivate: [AdminGuard] },
   { path: '**', component: NotFoundComponent },
 
 ];

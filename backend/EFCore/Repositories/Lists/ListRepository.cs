@@ -41,7 +41,7 @@ namespace EFCore.Repositories.Lists
 
         public Task<List<List>> GetLists(int userId)
         {
-            return _context.Lists.Where(l => l.UserId == userId).OrderBy(l => l.Name).ToListAsync();
+            return _context.Lists.Where(l => l.UserId == userId).OrderByDescending(l => l.CreatedAt).ToListAsync();
         }
 
         public async Task<List> UpdateList(List list)

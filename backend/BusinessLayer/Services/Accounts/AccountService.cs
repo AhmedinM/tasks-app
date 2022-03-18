@@ -181,5 +181,21 @@ namespace BusinessLayer.Services.Accounts
                 return new UserDto{};
             }
         }
+
+        public async Task<bool> AdminDeleteUser(DeleteUserDto deleteUserDto)
+        {
+            var user = await _userRepository.GetUser(deleteUserDto.Id);
+
+            if (user != null)
+            {
+                await _accountRepository.DeleteUser(user);
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

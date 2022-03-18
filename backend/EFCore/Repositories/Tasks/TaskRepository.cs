@@ -40,7 +40,7 @@ namespace EFCore.Repositories.Tasks
 
         public async Task<List<Core.Entities.Task>> GetTasks(int listId)
         {
-            return await _context.Tasks.Where(t => t.ListId == listId).OrderBy(t => t.Text).ToListAsync();
+            return await _context.Tasks.Where(t => t.ListId == listId).OrderByDescending(t => t.CreatedAt).ToListAsync();
         }
 
         public async Task<Core.Entities.Task> UpdateTask(Core.Entities.Task task)

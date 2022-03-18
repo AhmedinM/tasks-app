@@ -15,5 +15,6 @@ namespace BusinessLayer.Services.Accounts
         Task<UserDto> Login(CreateUserDto createUserDto);
         Task<GetUserDto> UpdatePassword(UpdateUserDto updateUserDto);
         Task<bool> DeleteUser(UpdateUserDto updateUserDto);
+        Task<bool> AdminDeleteUser(DeleteUserDto deleteUserDto);
     }
 }

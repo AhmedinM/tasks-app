@@ -29,9 +29,9 @@ namespace BusinessLayer.Services.Users
             return _mapper.Map<GetUserDto>(await _userRepository.GetUserByEmail(email));
         }
 
-        public async Task<List<GetUserDto>> GetUsers()
+        public async Task<List<GetUserDto>> GetUsers(int userId)
         {
-            return _mapper.Map<List<GetUserDto>>(await _userRepository.GetUsers());
+            return _mapper.Map<List<GetUserDto>>(await _userRepository.GetUsers(userId));
         }
     }
 }

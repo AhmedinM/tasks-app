@@ -52,7 +52,7 @@
                 </a> -->
             </div>
 
-            <button class="button button1" routerLink="/new-list">+ New List</button>
+            <button class="button button1" [routerLink]='["/new-list", userId]'><i class="fa fa-plus"></i> &nbsp; New List</button>
         </div>
 
         <div class="tasks-list-container">
@@ -71,9 +71,13 @@
                     <div class="dropdown-menu" id="dropdown-menu4" role="menu">
                       <div class="dropdown-content">
                         <div *ngIf="listCheck" class="dropdown-item" [routerLink]="['/edit-list', listId]">
-                          Edit
+                            <i class="fa fa-edit"></i>
+                            &nbsp; 
+                            Edit
                         </div>
                         <div *ngIf="listCheck" class="dropdown-item has-text-danger" (click)="deleteList(listId)">
+                            <i class="fa fa-trash"></i>
+                            &nbsp; 
                             Delete
                         </div>
                         <hr class="dropdown-divider myclr1">
@@ -151,7 +155,9 @@
             </div>
 
             <button *ngIf="listCheck" class="circle-add-button button" [routerLink]="['/new-task', listId]">
-                Add
+                <i class="fa fa-plus"></i>
+                <!-- &nbsp; 
+                Add -->
             </button>
         </div>
     </div>

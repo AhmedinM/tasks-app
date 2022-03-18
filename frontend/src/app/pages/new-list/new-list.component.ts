@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ListService } from 'src/app/services/list.service';
 
 @Component({
@@ -14,9 +14,18 @@ export class NewListComponent implements OnInit {
     title: ['', Validators.required]
   });
 
-  constructor(private router: Router, private listService: ListService, private fb: FormBuilder) { }
+  constructor(private router: Router, private listService: ListService, private fb: FormBuilder, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.route.params.subscribe((params: Params) => {
+      var id = params['userId'];
+
+      if (id === 'undefined') {
+        this.router.navigate(['lists/']);
+      } else {
+        this.userId = parseInt(id);
+      }
+    });
   }
 
   createList() {

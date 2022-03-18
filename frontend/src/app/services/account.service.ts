@@ -38,12 +38,16 @@ export class AccountService {
     );
   }
 
-  addAdmin(email: string, password: string) {
+  addAdmin(email: string, password: string): Observable<User> {
     return this.http.post<User>(this.baseUrl + "account/register-admin", { email, password });
   }
 
   deleteAccount(userId: number, password: string) {
-    return this.http.delete(this.baseUrl + "account/delete/" + userId, { body: {id: userId, password} });
+    return this.http.delete(this.baseUrl + "account/delete/" + userId, { body: { id: userId, password } });
+  }
+
+  deleteUser(id: number) {
+    return this.http.delete(this.baseUrl + "account/delete-user/" + id, { body: { id }});
   }
 
   setCurrentUser(user: User | null) {
@@ -65,22 +69,11 @@ export class AccountService {
     localStorage.removeItem('user');
   }
 
-  getDecodedToken(user: string | null) {
-    // return JSON.parse(atob(token.split('.')[1]));
-    // var user = localStorage.getItem("user");
-    if (user) {
-      var token = JSON.parse(user).token;
-      
-      var newToken: any = jwt_decode(token);
-      return this.getUserByEmail(newToken.nameId).subscribe(user => {
-          return token
-      });
-    } else {
-      return {msg: 2};
-    }
+  changePassword(password: string, id: number) {
+    return this.http.put(this.baseUrl + "account/update-password/" + id, { id, password });
   }
 
-  getUserByEmail(email: string) {
-    return this.http.get<User>(this.baseUrl + 'user/email/' + email);
-  }
+  // getUserByEmail(email: string) {
+  //   return this.http.get<User>(this.baseUrl + 'user/email/' + email);
+  // }
 }

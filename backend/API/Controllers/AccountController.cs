@@ -68,5 +68,14 @@ namespace API.Controllers
                 BadRequest("Your info is incorrect") :
                 NoContent();
         }
+
+        [HttpDelete("delete-user/{userId}")]
+        public async Task<ActionResult<bool>> AdminDeleteUser(int userId, DeleteUserDto deleteUserDto) {
+            if (userId != deleteUserDto.Id) return BadRequest("IDs are not the same");
+
+            var result = await _accountService.AdminDeleteUser(deleteUserDto);
+
+            return NoContent();
+        }
     }
 }

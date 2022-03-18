@@ -26,9 +26,9 @@ namespace EFCore.Repositories.Users
             return await _context.Users.SingleOrDefaultAsync(u => u.Email == email);
         }
 
-        public async Task<List<User>> GetUsers()
+        public async Task<List<User>> GetUsers(int userId)
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Users.Where(u => u.Id != userId).OrderByDescending(u => u.CreatedAt).ToListAsync();
         }
     }
 }

@@ -1,32 +1,90 @@
 <div class="centered-content">
     <div class="login-container">
+        <form [formGroup]="passwordForm" (ngSubmit)="passwordForm.valid && changePassword()">
         <div class="title">
-            <h1>user@test.com</h1>
-            <button class="button button3" (click)="logout()">
-                <i class="fa fa-sign-out"></i><span> Log out</span>
+            <h1>{{user.email}}</h1>
+            <button type="button" class="button button3" (click)="logout()">
+                <i class="fa fa-sign-out"></i><span> &nbsp; Log out</span>
             </button>
         </div>
         <hr>
         <h3 class="title">Change password:</h3>
         <div class="field">
             <p class="control has-icons-left">
-                <input #passwordInput class="input" type="password" placeholder="Enter new password...">
+                <input
+                    [class.is-invalid]="passwordForm.get('password')?.errors && passwordForm.get('password')?.touched"
+                    formControlName="password"
+                    class="input" type="password" placeholder="Enter new password...">
                 <span class="icon is-small is-left">
                     <i class="fa fa-lock has-text-success"></i>
                 </span>
             </p>
+            <div class="invalid-feedback" *ngIf="passwordForm.get('password')?.hasError('required') && passwordForm.get('password')?.touched">
+                Please enter password.
+              </div>
+              <div class="invalid-feedback" *ngIf="passwordForm.get('password')?.hasError('minlength')">
+                Password must be at least 3 characters.
+              </div>
         </div>
         <div class="field">
             <p class="control has-icons-left">
-                <input #confirmInput class="input" type="password" placeholder="Confirm password...">
+                <input
+                    [class.is-invalid]="passwordForm.get('confirmPassword')?.errors && passwordForm.get('confirmPassword')?.touched"
+                    formControlName="confirmPassword"
+                    class="input" type="password" placeholder="Confirm password...">
                 <span class="icon is-small is-left">
                     <i class="fa fa-lock has-text-success"></i>
                 </span>
             </p>
+            <div class="invalid-feedback" *ngIf="passwordForm.get('confirmPassword')?.hasError('required') && passwordForm.get('confirmPassword')?.touched">
+            Please confirm password.
+          </div>
+          <div class="invalid-feedback" *ngIf="passwordForm.get('confirmPassword')?.hasError('isMatching')">
+            Passwords are not the same.
+          </div>
+        </div>
+        <div *ngIf="error" style="color: red;">
+            {{error.error}}
+        </div>
+        <div *ngIf="saved" style="color: green;">
+            Password changed.
         </div>
         <hr>
         <div class="field buttons">
-            <button class="button button1" routerLink="/">Close</button>
-            <button class="button button2" routerLink="/">Save</button>
+            <button type="button" class="button button1" routerLink="/"><i class="fa fa-ban"></i> &nbsp; Close</button>
+            <button [disabled]="!passwordForm.valid" type="submit" class="button button2"><i class="fa fa-save"></i> &nbsp; Save</button>
         </div>
+    </form>
+    <hr>
+    <form [formGroup]="deleteForm" (ngSubmit)="deleteForm.valid && deleteUser()">
+        <h3 class="title" style="color: red;">Delete account:</h3>
+            <div class="field">
+              <p class="control has-icons-left">
+                <input
+                  [class.is-invalid]="deleteForm.get('password')?.errors && deleteForm.get('password')?.touched" 
+                  formControlName="password"
+                  class="input" type="password" placeholder="Password">
+                <span class="icon is-small is-left">
+                  <i class="fa fa-lock has-text-success"></i>
+                </span>
+              </p>
+              <div class="invalid-feedback" *ngIf="deleteForm.get('password')?.errors && deleteForm.get('password')?.touched">
+                Please enter password.
+              </div>
+            </div>
+            <div *ngIf="deleteError" style="color: red;">
+              {{deleteError.error}}
+            </div>
+            <div class="field">
+              <p class="control is-pulled-right">
+                <button [disabled]="!deleteForm.valid" type="submit" class="button button4">
+                  <i class="fa fa-trash"></i>
+                  &nbsp; 
+                  Delete
+                </button>
+              </p>
+            </div>
+      </form>
+
+    </div>
 </div>

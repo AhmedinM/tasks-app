@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { User } from 'src/app/models/user.model';
 import { AccountService } from 'src/app/services/account.service';
 import { UserService } from 'src/app/services/user.service';
@@ -16,7 +16,7 @@ export class AdminPanelComponent implements OnInit {
   error: any;
   error2: any;
   saved = false;
-  adminId = 1;
+  user: any;
 
   registerForm: FormGroup = this.fb.group({
     email: ['', [Validators.email, Validators.required]],
@@ -27,9 +27,10 @@ export class AdminPanelComponent implements OnInit {
     password: ['', [Validators.required]]
   });
 
-  constructor(private route: ActivatedRoute, private userService: UserService, private fb: FormBuilder, private accountService: AccountService) { }
+  constructor(private route: ActivatedRoute, private userService: UserService, private fb: FormBuilder, private accountService: AccountService, private router: Router) { }
 
   ngOnInit(): void {
+    this.getUser();
     this.route.params.subscribe((params: Params) => {
       var num = params["window"];
       if (num == 2 || num == 3) {
@@ -41,8 +42,14 @@ export class AdminPanelComponent implements OnInit {
     });
   }
 
+  getUser() {
+    this.accountService.currentUser$.subscribe(user => {
+      this.user = user;
+    });
+  }
+
   getUsers() {
-    this.userService.getUsers().subscribe(users => {
+    this.userService.getUsers(this.user.id).subscribe(users => {
       this.users = users;
     });
   }
@@ -50,6 +57,7 @@ export class AdminPanelComponent implements OnInit {
   registerAdmin() {
     this.accountService.addAdmin(this.registerForm.value.email, this.registerForm.value.password).subscribe(() => {
       this.saved = true
+      this.error = null;
     }, err => {
       this.saved = false;
       this.error = err;
@@ -57,15 +65,29 @@ export class AdminPanelComponent implements OnInit {
   }
 
   deleteAdmin() {
-    this.accountService.deleteAccount(this.adminId, this.deleteForm.value.password).subscribe(() => {
-      this.logout();
-    }, err => {
-      this.error2 = err;
-    });
+    if (confirm("Are you sure you want to delete your account?")) {
+      this.accountService.deleteAccount(this.user.id, this.deleteForm.value.password).subscribe(() => {
+        this.logout();
+      }, err => {
+        this.error2 = err;
+      });
+    }
+  }
+
+  deleteUser(id: number | undefined) {
+    if (confirm("Are you sure you want to remove this user?") && id != undefined) {
+      this.accountService.deleteUser(id).subscribe(() => {
+        alert("User is removed.");
+        this.getUsers();
+      }, err => {
+        console.log(err);
+      });
+    }
   }
 
   logout() {
-    localStorage.removeItem("user");
+    this.accountService.logout();
+    this.router.navigateByUrl("/check");
   }
 
 }

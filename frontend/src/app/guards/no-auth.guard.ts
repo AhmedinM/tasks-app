@@ -14,8 +14,18 @@ export class NoAuthGuard implements CanActivate {
     return this.accountService.currentUser$.pipe(
       map(user => {
         if (!user) return true;
-        this.router.navigateByUrl('/');
-        return false;
+        if (user && user.role !== "User") {
+          if (user.role === "Admin") {
+            this.router.navigate(['/admin/', user.id]);
+            return false;
+          } else {
+            return true;
+          }
+        } else {
+          this.router.navigateByUrl('/');
+          return false;
+        }
+        
       })
     );
   }
