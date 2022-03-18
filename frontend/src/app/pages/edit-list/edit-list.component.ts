@@ -40,11 +40,11 @@ export class EditListComponent implements OnInit {
 
   saveList() {
     this.listService.updateList(this.listId, this.editForm.value.title).subscribe(() => {
-      this.router.navigate(["/"]);
+      this.router.navigate(["/lists", this.listId]);
     });
   }
 
   cancel() { 
-    this.router.navigate(["/lists"]);
+    this.router.navigate(["/lists", this.listId]);
   }
 }

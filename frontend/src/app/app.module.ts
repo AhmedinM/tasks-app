@@ -9,7 +9,7 @@ import { NewTaskComponent } from './pages/new-task/new-task.component';
 import { LoginComponent } from './pages/login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { WebReqInterceptor } from './_interceptors/web-req.interceptor';
+// import { WebReqInterceptor } from './_interceptors/web-req.interceptor';
 import { SignupComponent } from './pages/signup/signup.component';
 import { EditTaskComponent } from './pages/edit-task/edit-task.component';
 import { EditListComponent } from './pages/edit-list/edit-list.component';
@@ -42,7 +42,7 @@ import { AdminPanelComponent } from './pages/admin-panel/admin-panel.component';
     ReactiveFormsModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: WebReqInterceptor, multi: true}
+    // { provide: HTTP_INTERCEPTORS, useClass: WebReqInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]
 })

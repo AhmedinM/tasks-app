@@ -33,6 +33,9 @@
             Please enter password.
           </div>
         </div>
+        <div *ngIf="error" style="color: red;">
+          {{error.error}}
+        </div>
         <div class="field">
           <p class="control is-pulled-right">
             <button [disabled]="!loginForm.valid" type="submit" class="button is-success has-text-light">

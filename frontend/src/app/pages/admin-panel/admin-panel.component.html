@@ -19,7 +19,7 @@
                     <p>Delete Account</p>
                 </a>
                 <hr>
-                <a class="list-menu-item">
+                <a class="list-menu-item" (click)="logout()">
                     <i class="fa fa-sign-out marg"></i>
                     <p>Logout</p>
                 </a>
@@ -37,7 +37,7 @@
                 <span class="alert-message" >Choose a list...</span>
             </div>
 
-            <div class="scroll" *ngIf="users">
+            <div class="scroll" *ngIf="users" style="overflow-y: scroll; max-height: 80%;">
                 <div *ngFor="let user of users">
                     <div class="task">
                         <p>
@@ -65,33 +65,59 @@
                 <br>
             </div>
 
-            <div class="scroll" *ngIf="users">
+            <form [formGroup]="registerForm" (ngSubmit)="registerForm.valid && registerAdmin()" class="scroll">
                 <div class="login-container">
                     <div class="field">
                       <p class="control has-icons-left has-icons-right">
-                        <input #emailInput class="input" type="email" placeholder="Email">
+                        <input
+                          [class.is-invalid]="registerForm.get('email')?.errors && registerForm.get('email')?.touched" 
+                          formControlName="email"
+                          class="input"
+                          type="email" 
+                          placeholder="Email">
                         <span class="icon is-small is-left">
                           <i class="fa fa-envelope has-text-success"></i>
                         </span>
                       </p>
+                      <div class="invalid-feedback" *ngIf="registerForm.get('email')?.hasError('required') && registerForm.get('email')?.touched">
+                        Please enter email.
+                      </div>
+                      <div class="invalid-feedback" *ngIf="registerForm.get('email')?.hasError('email') && registerForm.get('email')?.touched">
+                        Please enter correct email format.
+                      </div>
                     </div>
                     <div class="field">
                       <p class="control has-icons-left">
-                        <input #passwordInput class="input" type="password" placeholder="Password">
+                        <input 
+                          [class.is-invalid]="registerForm.get('password')?.errors && registerForm.get('password')?.touched" 
+                          formControlName="password"
+                          class="input" type="password" placeholder="Password">
                         <span class="icon is-small is-left">
                           <i class="fa fa-lock has-text-success"></i>
                         </span>
                       </p>
+                      <div class="invalid-feedback" *ngIf="registerForm.get('password')?.hasError('required') && registerForm.get('password')?.touched">
+                        Please enter password.
+                      </div>
+                      <div class="invalid-feedback" *ngIf="registerForm.get('password')?.hasError('minlength')">
+                        Password must be at least 3 characters.
+                      </div>
+                    </div>
+                    <div *ngIf="error" style="color: red;">
+                      {{error.error}}
+                    </div>
+                    <div *ngIf="saved" style="color: green;">
+                      New Admin created.
                     </div>
                     <div class="field">
                       <p class="control has-text-centered">
-                        <button class="button is-success has-text-light">
+                        <button [disabled]="!registerForm.valid" type="submit" class="button is-success has-text-light">
                           Create
                         </button>
                       </p>
                     </div>
                 </div>
-            </div>
+              </form>
 
         </div>
 
@@ -101,25 +127,34 @@
                 <br>
             </div>
 
-            <div class="scroll" *ngIf="users">
+            <form [formGroup]="deleteForm" (ngSubmit)="registerForm.valid && deleteAdmin()" class="scroll">
                 <div class="login-container">
                     <div class="field">
                       <p class="control has-icons-left">
-                        <input #passwordInput class="input" type="password" placeholder="Password">
+                        <input
+                          [class.is-invalid]="deleteForm.get('password')?.errors && deleteForm.get('password')?.touched" 
+                          formControlName="password"
+                          class="input" type="password" placeholder="Password">
                         <span class="icon is-small is-left">
                           <i class="fa fa-lock has-text-success"></i>
                         </span>
                       </p>
+                      <div class="invalid-feedback" *ngIf="deleteForm.get('password')?.errors && deleteForm.get('password')?.touched">
+                        Please enter password.
+                      </div>
+                    </div>
+                    <div *ngIf="error" style="color: red;">
+                      {{error.error}}
                     </div>
                     <div class="field">
                       <p class="control is-pulled-right">
-                        <button class="button is-danger has-text-light">
+                        <button [disabled]="!deleteForm.valid" type="submit" class="button is-danger has-text-light">
                           Delete
                         </button>
                       </p>
                     </div>
                 </div>
-            </div>
+              </form>
 
         </div>
 

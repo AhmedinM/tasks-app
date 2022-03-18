@@ -21,6 +21,11 @@ namespace EFCore.Repositories.Users
             return await _context.Users.SingleOrDefaultAsync(u => u.Id == userId);
         }
 
+        public async Task<User> GetUserByEmail(string email)
+        {
+            return await _context.Users.SingleOrDefaultAsync(u => u.Email == email);
+        }
+
         public async Task<List<User>> GetUsers()
         {
             return await _context.Users.ToListAsync();

@@ -10,5 +10,6 @@ namespace BusinessLayer.Services.Users
     {
         Task<List<GetUserDto>> GetUsers();
         Task<GetUserDto> GetUser(int userId);
+        Task<GetUserDto> GetUserByEmail(string email);
     }
 }

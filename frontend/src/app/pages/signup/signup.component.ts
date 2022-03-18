@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AccountService } from 'src/app/services/account.service';
 
 @Component({
   selector: 'app-signup',
@@ -8,12 +10,14 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Vali
 })
 export class SignupComponent implements OnInit {
   registerForm: FormGroup = this.fb.group({
-    email: ['', Validators.required],
+    email: ['', [Validators.email, Validators.required]],
     password: ['', [Validators.required, Validators.minLength(3)]],
     confirmPassword: ['', [Validators.required, this.matchValues('password')]]
   });
 
-  constructor(private fb: FormBuilder) { }
+  error: any;
+
+  constructor(private fb: FormBuilder, private accountService: AccountService, private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -29,7 +33,12 @@ export class SignupComponent implements OnInit {
   }
 
   register() {
-    console.log(this.registerForm.value);
+    // console.log(this.registerForm.value);
+    this.accountService.signup(this.registerForm.value.email, this.registerForm.value.password).subscribe(() => {
+      this.router.navigateByUrl("/lists");
+    }, err => {
+      this.error = err;
+    });
   }
 
 }

@@ -151,5 +151,35 @@ namespace BusinessLayer.Services.Accounts
                 return false;
             }
         }
+
+        public async Task<UserDto> RegisterAdmin(CreateUserDto createUserDto)
+        {
+            var check = await CheckEmail(createUserDto.Email);
+            if (!check)
+            {
+                using var hmac = new HMACSHA512();
+
+                var user = new User
+                {
+                    Email = createUserDto.Email,
+                    PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(createUserDto.Password)),
+                    PasswordSalt = hmac.Key,
+                    Role = "Admin"
+                };
+
+                var regUser = await _accountRepository.RegisterUser(user);
+
+                var token = _tokenService.CreateToken(regUser);
+
+                var result = _mapper.Map<UserDto>(regUser);
+                result.Token = token;
+
+                return result;
+            }
+            else
+            {
+                return new UserDto{};
+            }
+        }
     }
 }

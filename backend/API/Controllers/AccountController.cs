@@ -27,6 +27,16 @@ namespace API.Controllers
                 Created("User is successfully created", user);
         }
 
+        [HttpPost("register-admin")]
+        public async Task<ActionResult<UserDto>> RegisterAdmin(CreateUserDto createUserDto)
+        {
+            var user = await _accountService.RegisterAdmin(createUserDto);
+
+            return (user.Email == null) ?
+                BadRequest("Email already exists") :
+                Created("User is successfully created", user);
+        }
+
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(CreateUserDto createUserDto)
         {

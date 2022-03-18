@@ -10,5 +10,6 @@ namespace EFCore.Repositories.Users
     {
         Task<List<User>> GetUsers();
         Task<User> GetUser(int userId);
+        Task<User> GetUserByEmail(string email);
     }
 }

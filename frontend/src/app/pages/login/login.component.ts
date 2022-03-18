@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AccountService } from 'src/app/services/account.service';
 
 @Component({
   selector: 'app-login',
@@ -7,12 +9,14 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Vali
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+  error: any;
+
   loginForm: FormGroup = this.fb.group({
     email: ['', Validators.required],
     password: ['', Validators.required]
   });
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private accountService: AccountService, private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -24,7 +28,13 @@ export class LoginComponent implements OnInit {
   // }
 
   login() {
-    console.log(this.loginForm.value);
+    // console.log(this.loginForm.value);
+    // PIPE ili SUBSCRIBE
+    this.accountService.login(this.loginForm.value.email, this.loginForm.value.password).subscribe( () => {
+      this.router.navigateByUrl("/lists");
+    }, err => {
+      this.error = err;
+    });
   }
 
 }

@@ -13,8 +13,11 @@
               <i class="fa fa-envelope  has-text-success"></i>
             </span>
           </p>
-          <div class="invalid-feedback" *ngIf="registerForm.get('email')?.errors && registerForm.get('email')?.touched">
+          <div class="invalid-feedback" *ngIf="registerForm.get('email')?.hasError('required') && registerForm.get('email')?.touched">
             Please enter email.
+          </div>
+          <div class="invalid-feedback" *ngIf="registerForm.get('email')?.hasError('email') && registerForm.get('email')?.touched">
+            Please enter correct email format.
           </div>
         </div>
         <div class="field">
@@ -48,6 +51,9 @@
           <div class="invalid-feedback" *ngIf="registerForm.get('confirmPassword')?.hasError('isMatching')">
             Passwords are not the same.
           </div>
+        </div>
+        <div *ngIf="error" style="color: red;">
+          {{error.error}}
         </div>
         <div class="field">
           <p class="control is-pulled-right">

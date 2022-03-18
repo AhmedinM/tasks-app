@@ -10,6 +10,7 @@ namespace BusinessLayer.Services.Accounts
     public interface IAccountService
     {
         Task<UserDto> RegisterUser(CreateUserDto createUserDto);
+        Task<UserDto> RegisterAdmin(CreateUserDto createUserDto);
         Task<bool> CheckEmail(string email);
         Task<UserDto> Login(CreateUserDto createUserDto);
         Task<GetUserDto> UpdatePassword(UpdateUserDto updateUserDto);
