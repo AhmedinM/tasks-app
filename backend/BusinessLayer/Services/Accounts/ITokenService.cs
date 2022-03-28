@@ -8,6 +8,6 @@ namespace BusinessLayer.Services.Accounts
 {
     public interface ITokenService
     {
-        string CreateToken(User user);
+        Task<string> CreateToken(User user);
     }
 }

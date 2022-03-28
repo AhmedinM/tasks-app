@@ -18,6 +18,7 @@ namespace API.Controllers
             _userService = userService;
         }
 
+        [Authorize(Policy = "RequireAdminRole")]
         [HttpGet("all/{userId}")]
         public async Task<ActionResult<List<GetUserDto>>> GetUsers(int userId)
         {
@@ -28,7 +29,7 @@ namespace API.Controllers
                 Ok(result);
         }
 
-        [Authorize]
+        [Authorize(Roles = "User")]
         [HttpGet("one/{userId}")]
         public async Task<ActionResult<GetUserDto>> GetUser(int userId)
         {
@@ -39,6 +40,7 @@ namespace API.Controllers
                 Ok(result);
         }
 
+        [Authorize(Roles = "User")]
         [HttpGet("email/{email}")]
         public async Task<ActionResult<GetUserDto>> GetUserByEmail(string email)
         {

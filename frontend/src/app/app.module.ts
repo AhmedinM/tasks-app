@@ -17,6 +17,7 @@ import { StartPageComponent } from './pages/start-page/start-page.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { AdminPanelComponent } from './pages/admin-panel/admin-panel.component';
+import { TokenInterceptor } from './_interceptors/token.interceptor';
 
 
 @NgModule({
@@ -43,6 +44,7 @@ import { AdminPanelComponent } from './pages/admin-panel/admin-panel.component';
   ],
   providers: [
     // { provide: HTTP_INTERCEPTORS, useClass: WebReqInterceptor, multi: true}
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

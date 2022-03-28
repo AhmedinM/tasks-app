@@ -53,7 +53,7 @@ namespace BusinessLayer.Services.Tasks
         public async Task<GetTaskDto> UpdateTaskStatus(int taskId)
         {
             var task = await _taskRepository.GetTask(taskId);
-            task.Finished = task.Finished ? false : true;
+            task.Finished = !task.Finished;
 
             return _mapper.Map<GetTaskDto>(await _taskRepository.UpdateTask(task));
         }

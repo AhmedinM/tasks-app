@@ -94,4 +94,9 @@ export class TaskViewComponent implements OnInit {
     }
   }
 
+  logout() {
+    this.accountService.logout();
+    this.router.navigateByUrl("/check");
+  }
+
 }

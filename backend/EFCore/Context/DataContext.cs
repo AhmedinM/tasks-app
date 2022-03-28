@@ -1,13 +1,18 @@
 
 using Core.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Task = Core.Entities.Task;
 
 namespace EFCore.Context
 {
-    public class DataContext : DbContext
+    // public class DataContext : DbContext
+    public class DataContext : IdentityDbContext<User, Role, int,
+        IdentityUserClaim<int>, UserRole, IdentityUserLogin<int>,
+        IdentityRoleClaim<int>, IdentityUserToken<int>>
     {
-        public DbSet<User> Users { get; set; }
+        // public DbSet<User> Users { get; set; }
         public DbSet<List>  Lists { get; set; }
         public DbSet<Task> Tasks { get; set; }
       
@@ -20,7 +25,19 @@ namespace EFCore.Context
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<User>()
-                .HasIndex(u => u.Email).IsUnique();
+                .HasMany(u => u.UserRoles)
+                .WithOne(ur => ur.User)
+                .HasForeignKey(ur => ur.UserId)
+                .IsRequired();
+
+            modelBuilder.Entity<Role>()
+                .HasMany(r => r.UserRoles)
+                .WithOne(ur => ur.Role)
+                .HasForeignKey(ur => ur.RoleId)
+                .IsRequired();
+
+            // modelBuilder.Entity<User>()
+            //     .HasIndex(u => u.Email).IsUnique();
 
             modelBuilder.Entity<User>()
                 .Property(u => u.CreatedAt).HasDefaultValue(DateTime.Now);

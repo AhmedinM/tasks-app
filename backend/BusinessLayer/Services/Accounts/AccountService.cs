@@ -9,26 +9,32 @@ using Core.DTOs.Users;
 using Core.Entities;
 using EFCore.Repositories.Accounts;
 using EFCore.Repositories.Users;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace BusinessLayer.Services.Accounts
 {
     public class AccountService : IAccountService
     {
-        private readonly IAccountRepository _accountRepository;
         private readonly IMapper _mapper;
         private readonly ITokenService _tokenService;
         private readonly IUserRepository _userRepository;
-        public AccountService(IAccountRepository accountRepository, IMapper mapper, ITokenService tokenService, IUserRepository userRepository)
+        private readonly SignInManager<User> _signInManager;
+         private readonly UserManager<User> _userManager;
+        public AccountService(UserManager<User> userManager,
+            IMapper mapper, ITokenService tokenService, IUserRepository userRepository,
+            SignInManager<User> signInManager)
         {
+            _signInManager = signInManager;
             _userRepository = userRepository;
             _tokenService = tokenService;
             _mapper = mapper;
-            _accountRepository = accountRepository;
+            _userManager = userManager;
         }
 
         public async Task<bool> CheckEmail(string email)
         {
-            var user = await _accountRepository.GetUserByEmail(email);
+            var user = await _userManager.Users.SingleOrDefaultAsync(u => u.Email == email);
             if (user == null)
             {
                 return false;
@@ -37,112 +43,112 @@ namespace BusinessLayer.Services.Accounts
             {
                 return true;
             }
-            // return false;
         }
 
         public async Task<UserDto> RegisterUser(CreateUserDto createUserDto)
         {
-            var check = await CheckEmail(createUserDto.Email);
-            if (!check)
+            var user = new User
             {
-                using var hmac = new HMACSHA512();
+                UserName = createUserDto.Email,
+                Email = createUserDto.Email,
+                // Role = "User"
+            };
 
-                var user = new User
-                {
-                    Email = createUserDto.Email,
-                    PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(createUserDto.Password)),
-                    PasswordSalt = hmac.Key,
-                    Role = "User"
-                };
+            var result = await _userManager.CreateAsync(user, createUserDto.Password);
 
-                var regUser = await _accountRepository.RegisterUser(user);
+            if(!result.Succeeded)
+                throw new Exception(result.ToString());
 
-                var token = _tokenService.CreateToken(regUser);
+            var roleResult = await _userManager.AddToRoleAsync(user, "User");
 
-                var result = _mapper.Map<UserDto>(regUser);
-                result.Token = token;
+            if(!roleResult.Succeeded)
+                throw new Exception(result.ToString());
 
-                return result;
+            var token = await _tokenService.CreateToken(user);
 
-                // return await _accountRepository.RegisterUser(user);
-            }
-            else
-            {
-                return new UserDto{};
-            }
-            
-            // throw new NotImplementedException();
-            // var user = _mapper.Map<User>(createUserDto);
-            // return await _accountRepository.RegisterUser(user);
+            var res = _mapper.Map<UserDto>(user);
+            res.Roles = new List<string>();
+            res.Roles.Add("User");
+            res.Token = token;
+
+            return res;
         }
 
         public async Task<UserDto> Login(CreateUserDto createUserDto)
         {
-            var user = await _accountRepository.GetUserByEmail(createUserDto.Email);
+            var user = await _userManager.Users.SingleOrDefaultAsync(u => u.Email == createUserDto.Email);
 
-            if (user != null)
+            if (user == null)
+                throw new Exception("Email doesn't exist");
+
+            
+            var result = await _signInManager.CheckPasswordSignInAsync(user, createUserDto.Password, false);
+
+            if (result.Succeeded)
             {
-                using var hmac = new HMACSHA512(user.PasswordSalt);
-                var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(createUserDto.Password));
-
-                for (var i = 0; i < computedHash.Length; i++)
+                var user2 = await _userManager.Users
+                .Include(u => u.UserRoles)
+                .ThenInclude(u => u.Role)
+                .Select(u => new
                 {
-                    if (computedHash[i] != user.PasswordHash[i])
-                    {
-                        return new UserDto{};
-                    }
-                }
+                    u.Id,
+                    Email = u.Email,
+                    Roles = u.UserRoles.Select(r => r.Role.Name).ToList()
+                })
+                .FirstOrDefaultAsync(u => u.Email == createUserDto.Email);
 
-                var token = _tokenService.CreateToken(user);
+                var user3 = new UserDto
+                {
+                    Id = user2.Id,
+                    Email = user2.Email,
+                    Roles = user2.Roles
+                };
 
-                var result = _mapper.Map<UserDto>(user);
-                result.Token = token;
+                var token = await _tokenService.CreateToken(user);
 
-                return result;
+                // var res = _mapper.Map<UserDto>(user2);
+                // res.Token = token;
+                user3.Token = token;
 
-                // return user;
+                // return res;
+                return user3;
             }
             else
             {
-                return new UserDto{};
+                throw new Exception("Password is incorrect");
             }
+            
         }
 
-        public async Task<GetUserDto> UpdatePassword(UpdateUserDto updateUserDto)
+        public async Task<GetUserDto> UpdatePassword(UpdatePasswordDto updatePasswordDto)
         {
-            var user = await _userRepository.GetUser(updateUserDto.Id);
+            var user = await _userManager.Users.SingleOrDefaultAsync(u => u.Id == updatePasswordDto.Id);
 
-            using var hmac = new HMACSHA512();
+            if (user != null)
+            {
+                var result = await _userManager.ChangePasswordAsync(user, updatePasswordDto.OldPassword, updatePasswordDto.Password);
 
-            var passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(updateUserDto.Password));
-            var passwordSalt = hmac.Key;
+                if (result.Succeeded)
+                    return _mapper.Map<GetUserDto>(await _userManager.Users.SingleOrDefaultAsync(u => u.Id == updatePasswordDto.Id));
 
-            user.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
+                throw new Exception("Wrong password");
+            }
 
-            return _mapper.Map<GetUserDto>(await _accountRepository.UpdateUser(user));
-
-            // return result;
+            throw new Exception("Failed");
         }
 
         public async Task<bool> DeleteUser(UpdateUserDto updateUserDto)
         {
-            var user = await _userRepository.GetUser(updateUserDto.Id);
+            var user = await _userManager.Users.SingleOrDefaultAsync(u => u.Id == updateUserDto.Id);
 
-            if (user != null)
+            if (user == null)
+                return false;
+
+            var result = await _signInManager.CheckPasswordSignInAsync(user, updateUserDto.Password, false);
+
+            if (result.Succeeded)
             {
-                using var hmac = new HMACSHA512(user.PasswordSalt);
-                var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(updateUserDto.Password));
-
-                for (var i = 0; i < computedHash.Length; i++)
-                {
-                    if (computedHash[i] != user.PasswordHash[i])
-                    {
-                        return false;
-                    }
-                }
-
-                await _accountRepository.DeleteUser(user);
+                await _userManager.DeleteAsync(user);
 
                 return true;
             }
@@ -154,48 +160,38 @@ namespace BusinessLayer.Services.Accounts
 
         public async Task<UserDto> RegisterAdmin(CreateUserDto createUserDto)
         {
-            var check = await CheckEmail(createUserDto.Email);
-            if (!check)
+            var user = new User
             {
-                using var hmac = new HMACSHA512();
+                UserName = createUserDto.Email,
+                Email = createUserDto.Email,
+                // Role = "Admin"
+            };
 
-                var user = new User
-                {
-                    Email = createUserDto.Email,
-                    PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(createUserDto.Password)),
-                    PasswordSalt = hmac.Key,
-                    Role = "Admin"
-                };
+            var result = await _userManager.CreateAsync(user, createUserDto.Password);
 
-                var regUser = await _accountRepository.RegisterUser(user);
+            if(!result.Succeeded)
+                throw new Exception(result.ToString());
+                
+            var roleResult = await _userManager.AddToRoleAsync(user, "Admin");
 
-                var token = _tokenService.CreateToken(regUser);
+            if(!roleResult.Succeeded)
+                throw new Exception(result.ToString());
 
-                var result = _mapper.Map<UserDto>(regUser);
-                result.Token = token;
+            var token = _tokenService.CreateToken(user);
 
-                return result;
-            }
-            else
-            {
-                return new UserDto{};
-            }
+            return _mapper.Map<UserDto>(user);
         }
 
         public async Task<bool> AdminDeleteUser(DeleteUserDto deleteUserDto)
         {
-            var user = await _userRepository.GetUser(deleteUserDto.Id);
+            var user = await _userManager.Users.SingleOrDefaultAsync(u => u.Id == deleteUserDto.Id);
 
-            if (user != null)
-            {
-                await _accountRepository.DeleteUser(user);
-
-                return true;
-            }
-            else
-            {
+            if (user == null)
                 return false;
-            }
+
+            await _userManager.DeleteAsync(user);
+
+            return true;
         }
     }
 }

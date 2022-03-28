@@ -15,7 +15,11 @@ export class ProfileComponent implements OnInit {
   error: any;
   deleteError: any;
 
+  first = false;
+  second = false;
+
   passwordForm: FormGroup = this.fb.group({
+    oldPassword: ['', [Validators.required]],
     password: ['', [Validators.required, Validators.minLength(3)]],
     confirmPassword: ['', [Validators.required, this.matchValues('password')]]
   });
@@ -47,10 +51,12 @@ export class ProfileComponent implements OnInit {
   }
 
   changePassword() {
-    this.accountService.changePassword(this.passwordForm.value.password, this.user.id).subscribe(() => {
+    this.accountService.changePassword(this.passwordForm.value.oldPassword, this.passwordForm.value.password, this.user.id).subscribe(() => {
       this.saved = true;
+      this.error = false;
     }, err => {
       this.error = err;
+      this.saved = false;
     });
   }
 
@@ -60,8 +66,19 @@ export class ProfileComponent implements OnInit {
         this.logout();
       }, err => {
         this.deleteError = err;
+        this.saved = false;
       });
     }
+  }
+
+  showFirst() {
+    this.first = !this.first;
+    this.second = false;
+  }
+
+  showSecond() {
+    this.second = !this.second;
+    this.first = false;
   }
 
   logout() {

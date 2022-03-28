@@ -82,7 +82,14 @@
                         </div>
                         <hr class="dropdown-divider myclr1">
                         <div class="dropdown-item myclr2" routerLink="/profile">
-                            <i class="fa fa-user"></i><span> Profile</span>
+                            <i class="fa fa-user"></i>
+                            &nbsp;
+                            Profile
+                        </div>
+                        <div class="dropdown-item has-text-danger" (click)="logout()">
+                            <i class="fa fa-sign-out"></i>
+                            &nbsp;
+                            Log out
                         </div>
                       </div>
                     </div>

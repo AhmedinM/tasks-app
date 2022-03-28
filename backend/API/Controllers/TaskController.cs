@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BusinessLayer.Services.Tasks;
 using Core.DTOs.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -16,6 +17,7 @@ namespace API.Controllers
             _taskService = taskService;
         }
 
+        [Authorize(Roles = "User")]
         [HttpGet("one/{taskId}")]
         public async Task<ActionResult<GetTaskDto>> GetTask(int taskId)
         {
@@ -26,6 +28,7 @@ namespace API.Controllers
                 Ok(result);
         }
 
+        [Authorize(Roles = "User")]
         [HttpGet("tasks/{listId}")]
         public async Task<ActionResult<List<GetTaskDto>>> GetTasks(int listId)
         {
@@ -36,6 +39,7 @@ namespace API.Controllers
                 Ok(result);
         }
 
+        [Authorize(Roles = "User")]
         [HttpPost]
         public async Task<ActionResult<GetTaskDto>> CreateTask(CreateTaskDto createTaskDto)
         {
@@ -46,10 +50,12 @@ namespace API.Controllers
                 Ok(result);
         }
 
+        [Authorize(Roles = "User")]
         [HttpPut("task/{taskId}")]
         public async Task<ActionResult<string>> UpdateTask(int taskId, UpdateTaskDto updateTaskDto)
         {
-            if (taskId != updateTaskDto.Id) return BadRequest("IDs are not the same");
+            if (taskId != updateTaskDto.Id)
+                return BadRequest("IDs are not the same");
             
             var result = await _taskService.UpdateTask(updateTaskDto);
             
@@ -58,6 +64,7 @@ namespace API.Controllers
                 Ok(result);
         }
 
+        [Authorize(Roles = "User")]
         [HttpPut("status/{taskId}")]
         public async Task<ActionResult<GetTaskDto>> UpdateTaskStatus(int taskId)
         {
@@ -68,6 +75,7 @@ namespace API.Controllers
                 Ok(result);
         }
 
+        [Authorize(Roles = "User")]
         [HttpDelete("{taskId}")]
         public async Task<ActionResult> DeleteList(int taskId)
         {

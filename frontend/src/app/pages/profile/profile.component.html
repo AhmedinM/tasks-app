@@ -1,14 +1,32 @@
 <div class="centered-content">
-    <div class="login-container">
-        <form [formGroup]="passwordForm" (ngSubmit)="passwordForm.valid && changePassword()">
-        <div class="title">
+        <div class="login-container">
+          <div class="title">
             <h1>{{user.email}}</h1>
-            <button type="button" class="button button3" (click)="logout()">
+            <!-- <button type="button" class="button button3" (click)="logout()">
                 <i class="fa fa-sign-out"></i><span> &nbsp; Log out</span>
-            </button>
+            </button> -->
         </div>
-        <hr>
-        <h3 class="title">Change password:</h3>
+        <!-- <hr> -->
+        <div class="custom-drop" (click)="showFirst()">
+          Change password
+        </div>
+        <form *ngIf="first" class="custom-field" [formGroup]="passwordForm" (ngSubmit)="passwordForm.valid && changePassword()">
+        <!-- <h3 class="title">Change password:</h3> -->
+        <!-- Pravougaonik na koji se klikne i on se otvori (s animacijom) -->
+        <div class="field">
+          <p class="control has-icons-left">
+              <input
+                  [class.is-invalid]="passwordForm.get('oldPassword')?.errors && passwordForm.get('oldPassword')?.touched"
+                  formControlName="oldPassword"
+                  class="input" type="password" placeholder="Enter old password...">
+              <span class="icon is-small is-left">
+                  <i class="fa fa-lock has-text-success"></i>
+              </span>
+          </p>
+          <div class="invalid-feedback" *ngIf="passwordForm.get('oldPassword')?.errors && passwordForm.get('oldPassword')?.touched">
+              Please enter old password.
+          </div>
+        </div>
         <div class="field">
             <p class="control has-icons-left">
                 <input
@@ -51,12 +69,14 @@
         </div>
         <hr>
         <div class="field buttons">
-            <button type="button" class="button button1" routerLink="/"><i class="fa fa-ban"></i> &nbsp; Close</button>
             <button [disabled]="!passwordForm.valid" type="submit" class="button button2"><i class="fa fa-save"></i> &nbsp; Save</button>
         </div>
     </form>
-    <hr>
-    <form [formGroup]="deleteForm" (ngSubmit)="deleteForm.valid && deleteUser()">
+    <!-- <hr> -->
+    <div class="custom-drop" (click)="showSecond()">
+      Delete Account
+    </div>
+    <form *ngIf="second" class="custom-field" [formGroup]="deleteForm" (ngSubmit)="deleteForm.valid && deleteUser()">
         <h3 class="title" style="color: red;">Delete account:</h3>
             <div class="field">
               <p class="control has-icons-left">
@@ -85,6 +105,6 @@
               </p>
             </div>
       </form>
-
+      <button type="button" class="button button1" routerLink="/"><i class="fa fa-window-close"></i> &nbsp; Close</button>
     </div>
 </div>

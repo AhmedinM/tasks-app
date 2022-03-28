@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable, ReplaySubject } from 'rxjs';
+import { BehaviorSubject, map, Observable, ReplaySubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { User } from '../models/user.model';
 import jwt_decode from 'jwt-decode';
@@ -10,7 +10,8 @@ import jwt_decode from 'jwt-decode';
 })
 export class AccountService {
   baseUrl = environment.apiUrl;
-  private currentUserSource = new ReplaySubject<User | null>(1);
+  // private currentUserSource = new ReplaySubject<User | null>(1);  //  BEHAVIOUR SUBJECT
+  private currentUserSource = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSource.asObservable();
   // currentUser: any;
 
@@ -47,7 +48,7 @@ export class AccountService {
   }
 
   deleteUser(id: number) {
-    return this.http.delete(this.baseUrl + "account/delete-user/" + id, { body: { id }});
+    return this.http.delete(this.baseUrl + "account/delete-user/" + id);
   }
 
   setCurrentUser(user: User | null) {
@@ -69,9 +70,19 @@ export class AccountService {
     localStorage.removeItem('user');
   }
 
-  changePassword(password: string, id: number) {
-    return this.http.put(this.baseUrl + "account/update-password/" + id, { id, password });
+  changePassword(oldPassword: string, password: string, id: number) {
+    return this.http.put(this.baseUrl + "account/update-password/" + id, { id, password, oldPassword });
   }
+
+  // getToken() {
+  //   var user = localStorage.getItem("user");
+  //   if (user) {
+  //     var token = JSON.parse(user).token;
+  //     return token;
+  //   } else {
+  //     return null;
+  //   }
+  // }
 
   // getUserByEmail(email: string) {
   //   return this.http.get<User>(this.baseUrl + 'user/email/' + email);

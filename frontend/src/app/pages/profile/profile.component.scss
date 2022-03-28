@@ -12,8 +12,8 @@
     display: flex;
     flex-direction: column;
     background: white;
-    height: 65%;
-    min-height: 350px;
+    height: 75%;
+    min-height: 450px;
     width: 40%;
     min-width: 250px;
     border-radius: 2%;
@@ -59,6 +59,7 @@ hr {
 }
 
 .button1 {
+    margin-top: 2%;
     background-color: $myTwo;
     color: white;
 }
@@ -85,4 +86,17 @@ hr {
 
 .invalid-feedback {
     color: red;
+}
+
+.custom-drop {
+    border: 1px solid rgb(20, 50, 100);
+    padding: 3%;
+    cursor: pointer;
+    background-color: #e1e3e6;
+    color: rgb(20, 50, 100);
+}
+
+.custom-field {
+    border: 1px solid rgb(20, 50, 100);
+    padding: 3%;
 }

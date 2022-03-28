@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BusinessLayer.Services.Lists;
 using Core.DTOs.Lists;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -16,6 +17,7 @@ namespace API.Controllers
             _listService = listService;
         }
 
+        [Authorize(Roles = "User")]
         [HttpGet("one/{listId}")]
         public async Task<ActionResult<GetListDto>> GetList(int listId)
         {
@@ -26,6 +28,7 @@ namespace API.Controllers
                 Ok(result);
         }
 
+        [Authorize(Roles = "User")]
         [HttpGet("all/{userId}")]
         public async Task<ActionResult<List<GetListDto>>> GetLists(int userId)
         {
@@ -36,6 +39,7 @@ namespace API.Controllers
                 Ok(result);
         }
 
+        [Authorize(Roles = "User")]
         [HttpPost]
         public async Task<ActionResult<GetListDto>> CreateList(CreateListDto createListDto)
         {
@@ -46,6 +50,7 @@ namespace API.Controllers
                 Ok(result);
         }
 
+        [Authorize(Roles = "User")]
         [HttpPut("{listId}")]
         public async Task<ActionResult> UpdateList(int listId, UpdateListDto updateListDto)
         {
@@ -58,6 +63,7 @@ namespace API.Controllers
                 Ok(result);
         }
 
+        [Authorize(Roles = "User")]
         [HttpDelete("{listId}")]
         public async Task<ActionResult> DeleteList(int listId)
         {

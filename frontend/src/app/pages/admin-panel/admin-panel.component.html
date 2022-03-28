@@ -43,8 +43,8 @@
                         <p>
                             {{user.email}}
                             <span class="between">| </span>
-                            <span *ngIf="user.role!='Admin'" class="role">{{user.role}}</span>
-                            <span *ngIf="user.role=='Admin'" class="role2">{{user.role}}</span>
+                            <span *ngIf="!user.roles?.includes('Admin')" class="role">{{user.roles}}</span>
+                            <span *ngIf="user.roles?.includes('Admin')" class="role2">{{user.roles}}</span>
                         </p>
                         <div class="buttons">
                             <button class="button is-danger minbut" (click)="deleteUser(user.id)">
