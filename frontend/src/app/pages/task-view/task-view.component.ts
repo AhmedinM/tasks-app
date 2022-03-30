@@ -51,7 +51,9 @@ export class TaskViewComponent implements OnInit {
   getUser() {
     this.accountService.currentUser$.subscribe(user => {
       this.user = user;
-      this.userId = this.user.id;
+      if (this.user != null) {
+        this.userId = this.user.id;
+      }
     });
   }
 

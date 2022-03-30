@@ -31,7 +31,11 @@ namespace EFCore.Repositories.Lists
 
         public async Task<List> GetList(int listId)
         {
-            return await _context.Lists.SingleOrDefaultAsync(l => l.Id == listId);
+            var list = await _context.Lists.SingleOrDefaultAsync(l => l.Id == listId);
+
+            if (list == null)
+                throw new NullReferenceException(null);
+            return list;
         }
 
         public Task<List<List>> GetLists(int userId)

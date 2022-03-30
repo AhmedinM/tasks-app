@@ -29,7 +29,11 @@ namespace EFCore.Repositories.Tasks
 
         public async Task<Core.Entities.Task> GetTask(int taskId)
         {
-            return await _context.Tasks.SingleOrDefaultAsync(t => t.Id == taskId);
+            var task = await _context.Tasks.SingleOrDefaultAsync(t => t.Id == taskId);
+
+            if (task == null)
+                throw new NullReferenceException(null);
+            return task;
         }
 
         public async Task<List<Core.Entities.Task>> GetTasks(int listId)

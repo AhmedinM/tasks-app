@@ -31,13 +31,15 @@ namespace EFCore.Repositories.Accounts
 
         public async Task<User> RegisterUser(User user, string password)
         {
-            // await _context.Users.AddAsync(createUserDto);
-            // var u = await _userManager.CreateAsync(user, password);
-            // await _context.SaveChangesAsync();
+            await _context.Users.AddAsync(user);
+            var u = await _userManager.CreateAsync(user, password);
+            await _context.SaveChangesAsync();
 
-            //  return await GetUserByEmail(user.Email);
+            var user2 = await GetUserByEmail(user.Email);
 
-            return null;
+            if (user2 == null)
+                throw new NullReferenceException(null);
+            return user2;
         }
 
         public async Task<User> UpdateUser(User user)

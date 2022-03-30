@@ -14,12 +14,20 @@ namespace EFCore.Repositories.Users
 
         public async Task<User> GetUser(int userId)
         {
-            return await _context.Users.SingleOrDefaultAsync(u => u.Id == userId);
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.Id == userId);
+            
+            if (user == null)
+                throw new NullReferenceException(null);
+            return user;
         }
 
         public async Task<User> GetUserByEmail(string email)
         {
-            return await _context.Users.SingleOrDefaultAsync(u => u.Email == email);
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.Email == email);
+
+            if (user == null)
+                throw new NullReferenceException(null);
+            return user;
         }
 
         public async Task<List<User>> GetUsers(int userId)
