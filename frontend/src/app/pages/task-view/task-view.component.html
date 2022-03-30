@@ -13,43 +13,6 @@
                 <a *ngFor="let list of lists" class="list-menu-item" [routerLink]="['/lists', list.id]" routerLinkActive="is-active">
                     <p>{{list.name}}</p>
                 </a>
-
-                <!-- <a class="list-menu-item" [routerLink]="['/lists', listId]" routerLinkActive="is-active">
-                    <p>List 1</p>
-                </a>
-                <a class="list-menu-item" [routerLink]="['/lists', 2]" routerLinkActive="is-active">
-                    <p>List 2</p>
-                </a>
-                <a class="list-menu-item" [routerLink]="['/lists', 2]" routerLinkActive="is-active">
-                    <p>List 2</p>
-                </a>
-                <a class="list-menu-item" [routerLink]="['/lists', 2]" routerLinkActive="is-active">
-                    <p>List 2</p>
-                </a>
-                <a class="list-menu-item" [routerLink]="['/lists', 2]" routerLinkActive="is-active">
-                    <p>List 2</p>
-                </a>
-                <a class="list-menu-item" [routerLink]="['/lists', 2]" routerLinkActive="is-active">
-                    <p>List 2</p>
-                </a>
-                <a class="list-menu-item" [routerLink]="['/lists', 2]" routerLinkActive="is-active">
-                    <p>List 2</p>
-                </a>
-                <a class="list-menu-item" [routerLink]="['/lists', 2]" routerLinkActive="is-active">
-                    <p>List 2</p>
-                </a>
-                <a class="list-menu-item" [routerLink]="['/lists', 2]" routerLinkActive="is-active">
-                    <p>List 2</p>
-                </a>
-                <a class="list-menu-item" [routerLink]="['/lists', 2]" routerLinkActive="is-active">
-                    <p>List 2</p>
-                </a>
-                <a class="list-menu-item" [routerLink]="['/lists', 2]" routerLinkActive="is-active">
-                    <p>List 2</p>
-                </a>
-                <a class="list-menu-item" [routerLink]="['/lists', 2]" routerLinkActive="is-active">
-                    <p>List 2</p>
-                </a> -->
             </div>
 
             <button class="button button1" [routerLink]='["/new-list", userId]'><i class="fa fa-plus"></i> &nbsp; New List</button>
@@ -119,52 +82,10 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- <div class="task">
-                    <p>Something...</p>
-                    <div class="buttons">
-                        <button class="button is-info minbut" routerLink="/edit-task/2">
-                            <span class="icon is-small is-left">
-                                <i class="fa fa-edit"></i>
-                            </span>
-                        </button>
-                        <button class="button is-danger minbut" (click)="deleteTask('2')">
-                            <span class="icon is-small is-left">
-                                <i class="fa fa-trash"></i>
-                            </span>
-                        </button>
-                    </div>
-                </div>
-                <div class="task" (click)="onTaskClick(1)" [ngClass]="{ 'complete' : cmp }">
-                    <p>Something...</p>
-                </div>
-                <div class="task complete">
-                    <p>Something...</p>
-                </div>
-                <div class="task complete">
-                    <p>Something...</p>
-                </div>
-                <div class="task complete">
-                    <p>Something...</p>
-                </div>
-                <div class="task complete">
-                    <p>Something...</p>
-                </div>
-                <div class="task complete">
-                    <p>Something...</p>
-                </div>
-                <div class="task complete">
-                    <p>Something...</p>
-                </div>
-                <div class="task complete">
-                    <p>Something...</p>
-                </div> -->
             </div>
 
             <button *ngIf="listCheck" class="circle-add-button button" [routerLink]="['/new-task', listId]">
                 <i class="fa fa-plus"></i>
-                <!-- &nbsp; 
-                Add -->
             </button>
         </div>
     </div>

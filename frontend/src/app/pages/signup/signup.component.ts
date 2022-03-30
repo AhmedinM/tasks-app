@@ -33,7 +33,6 @@ export class SignupComponent implements OnInit {
   }
 
   register() {
-    // console.log(this.registerForm.value);
     this.accountService.signup(this.registerForm.value.email, this.registerForm.value.password).subscribe(() => {
       this.router.navigateByUrl("/lists");
     }, err => {

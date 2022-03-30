@@ -20,15 +20,6 @@ export class AuthGuard implements CanActivate {
         return false;
       })
     );
-
-  // canActivate(): boolean {
-  //   var token = localStorage.getItem("user");
-  //   if (token) {
-  //     return true;
-  //   } else {
-  //     this.router.navigate(["/check"]);
-  //     return false;
-  //   }
   }
   
 }

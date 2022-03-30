@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using BusinessLayer.Services.Tasks;
 using Core.DTOs.Tasks;
 using Microsoft.AspNetCore.Authorization;

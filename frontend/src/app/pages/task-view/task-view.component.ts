@@ -14,7 +14,6 @@ import { TaskService } from 'src/app/services/task.service';
 })
 export class TaskViewComponent implements OnInit {
   listId = 0;
-  // userId = 1;   //  privremeno
   userId: number | undefined = 0;
   user: any;
   listCheck = false;
@@ -31,8 +30,18 @@ export class TaskViewComponent implements OnInit {
       this.listId = params['listId'];
       this.getLists(this.userId as number);
       if (this.listId != undefined) {
-        this.listCheck = true;
-        this.getTasks(this.listId);
+        this.listService.getList(this.listId).subscribe(list => {
+          if (list != null && list.userId == this.userId) {
+            this.listCheck = true;
+            this.getTasks(this.listId);
+          } else {
+            this.listCheck = false;
+            this.router.navigateByUrl("/");
+          }
+        }, err => {
+          this.listCheck = false;
+          this.router.navigateByUrl("/");
+        });
       } else {
         this.listCheck = false;
       }

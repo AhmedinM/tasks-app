@@ -2,17 +2,11 @@
         <div class="login-container">
           <div class="title">
             <h1>{{user.email}}</h1>
-            <!-- <button type="button" class="button button3" (click)="logout()">
-                <i class="fa fa-sign-out"></i><span> &nbsp; Log out</span>
-            </button> -->
         </div>
-        <!-- <hr> -->
         <div class="custom-drop" (click)="showFirst()">
           Change password
         </div>
         <form *ngIf="first" class="custom-field" [formGroup]="passwordForm" (ngSubmit)="passwordForm.valid && changePassword()">
-        <!-- <h3 class="title">Change password:</h3> -->
-        <!-- Pravougaonik na koji se klikne i on se otvori (s animacijom) -->
         <div class="field">
           <p class="control has-icons-left">
               <input
@@ -72,7 +66,6 @@
             <button [disabled]="!passwordForm.valid" type="submit" class="button button2"><i class="fa fa-save"></i> &nbsp; Save</button>
         </div>
     </form>
-    <!-- <hr> -->
     <div class="custom-drop" (click)="showSecond()">
       Delete Account
     </div>

@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Core.DTOs.Users;
 using Core.Entities;
@@ -66,7 +62,6 @@ namespace BusinessLayer.Services.Users
                 newUsers.Add(user2);
             }
             
-            // return _mapper.Map<List<GetUserDto>>(users);
             return newUsers;
 
         }

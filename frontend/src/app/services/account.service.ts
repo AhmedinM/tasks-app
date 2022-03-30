@@ -10,10 +10,8 @@ import jwt_decode from 'jwt-decode';
 })
 export class AccountService {
   baseUrl = environment.apiUrl;
-  // private currentUserSource = new ReplaySubject<User | null>(1);  //  BEHAVIOUR SUBJECT
   private currentUserSource = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSource.asObservable();
-  // currentUser: any;
 
   constructor(private http: HttpClient) { }
 
@@ -54,7 +52,6 @@ export class AccountService {
   setCurrentUser(user: User | null) {
     if (user) this.setSession(user);
     this.currentUserSource.next(user);
-    // this.currentUser = user;
   }
 
   logout() {
@@ -73,18 +70,4 @@ export class AccountService {
   changePassword(oldPassword: string, password: string, id: number) {
     return this.http.put(this.baseUrl + "account/update-password/" + id, { id, password, oldPassword });
   }
-
-  // getToken() {
-  //   var user = localStorage.getItem("user");
-  //   if (user) {
-  //     var token = JSON.parse(user).token;
-  //     return token;
-  //   } else {
-  //     return null;
-  //   }
-  // }
-
-  // getUserByEmail(email: string) {
-  //   return this.http.get<User>(this.baseUrl + 'user/email/' + email);
-  // }
 }

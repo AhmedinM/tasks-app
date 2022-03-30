@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Core.DTOs.Tasks;
 using EFCore.Repositories.Tasks;
-using Core.Entities;
 
 namespace BusinessLayer.Services.Tasks
 {
@@ -42,7 +37,6 @@ namespace BusinessLayer.Services.Tasks
         public async Task<GetTaskDto> UpdateTask(UpdateTaskDto updateTaskDto)
         {
             var task = await _taskRepository.GetTask(updateTaskDto.Id);
-            // task.Text = updateTaskDto.Text;
 
             // KADA SE DVA OBJEKTA SPAJAJU U JEDAN, ONDA OVAKO - SA DVA ARGUMENTA
             // KADA SE JEDAN OBJEKAT PREPISUJE U DRUGI, ONDA SAMO JEDAN ARGUMENT

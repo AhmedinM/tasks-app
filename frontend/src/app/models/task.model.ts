@@ -1,6 +1,6 @@
 export interface Task {
     id: number;
     text?: string;
-    listId?: string;
+    listId?: number;
     finished?: boolean;
 }

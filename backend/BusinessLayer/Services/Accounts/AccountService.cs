@@ -1,13 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using AutoMapper;
 using Core.DTOs.Users;
 using Core.Entities;
-using EFCore.Repositories.Accounts;
 using EFCore.Repositories.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -51,7 +44,6 @@ namespace BusinessLayer.Services.Accounts
             {
                 UserName = createUserDto.Email,
                 Email = createUserDto.Email,
-                // Role = "User"
             };
 
             var result = await _userManager.CreateAsync(user, createUserDto.Password);
@@ -106,11 +98,8 @@ namespace BusinessLayer.Services.Accounts
 
                 var token = await _tokenService.CreateToken(user);
 
-                // var res = _mapper.Map<UserDto>(user2);
-                // res.Token = token;
                 user3.Token = token;
 
-                // return res;
                 return user3;
             }
             else
@@ -164,7 +153,6 @@ namespace BusinessLayer.Services.Accounts
             {
                 UserName = createUserDto.Email,
                 Email = createUserDto.Email,
-                // Role = "Admin"
             };
 
             var result = await _userManager.CreateAsync(user, createUserDto.Password);
