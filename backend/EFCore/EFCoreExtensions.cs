@@ -2,6 +2,7 @@
 using EFCore.Repositories.Accounts;
 using EFCore.Repositories.Lists;
 using EFCore.Repositories.Tasks;
+using EFCore.Repositories.UnitOfWork;
 using EFCore.Repositories.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,10 +17,11 @@ public static class EFCoreExtensions
     ) {
         services.AddDbContext<DataContext>(dboptions, scope);
 
-        services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<IAccountRepository, AccountRepository>();
-        services.AddScoped<IListRepository, ListRepository>();
-        services.AddScoped<ITaskRepository, TaskRepository>();
+        // services.AddScoped<IUserRepository, UserRepository>();
+        // services.AddScoped<IAccountRepository, AccountRepository>();
+        // services.AddScoped<IListRepository, ListRepository>();
+        // services.AddScoped<ITaskRepository, TaskRepository>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         
         return services;
     }

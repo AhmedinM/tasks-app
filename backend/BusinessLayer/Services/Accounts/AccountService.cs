@@ -11,15 +11,13 @@ namespace BusinessLayer.Services.Accounts
     {
         private readonly IMapper _mapper;
         private readonly ITokenService _tokenService;
-        private readonly IUserRepository _userRepository;
         private readonly SignInManager<User> _signInManager;
          private readonly UserManager<User> _userManager;
         public AccountService(UserManager<User> userManager,
-            IMapper mapper, ITokenService tokenService, IUserRepository userRepository,
+            IMapper mapper, ITokenService tokenService,
             SignInManager<User> signInManager)
         {
             _signInManager = signInManager;
-            _userRepository = userRepository;
             _tokenService = tokenService;
             _mapper = mapper;
             _userManager = userManager;

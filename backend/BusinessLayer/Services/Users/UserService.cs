@@ -9,14 +9,12 @@ namespace BusinessLayer.Services.Users
 {
     public class UserService : IUserService
     {
-        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
-        public UserService(IUserRepository userRepository, IMapper mapper, UserManager<User> userManager)
+        public UserService(IMapper mapper, UserManager<User> userManager)
         {
             _userManager = userManager;
             _mapper = mapper;
-            _userRepository = userRepository;
         }
 
         public async Task<GetUserDto> GetUser(int userId)
